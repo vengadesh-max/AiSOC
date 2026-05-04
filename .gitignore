@@ -1,0 +1,79 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+
+# Go
+*.exe
+*.test
+vendor/
+bin/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+*.tfvars
+!terraform.tfvars.example
+
+# Python
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.cursor/hooks/state/
+
+# Go test/build binaries inside plugins
+plugins/**/*-build-test
+plugins/**/*-build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Docker
+.docker/
+
+# Secrets
+*.pem
+*.key
+*.crt
+secrets/
+.gstack/
+
+# Local eval / build artifacts
+eval_report.json
+eval_mitre_accuracy_report.json
+.gocache/
+*.tsbuildinfo
+
+# Docusaurus generated cache (apps/docs)
+apps/docs/.docusaurus/
+apps/docs/build/

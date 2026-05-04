@@ -1,0 +1,63 @@
+{
+  "generated_at": "2026-05-04T11:20:09.681408+00:00",
+  "dataset": "synthetic_incidents.json (200 cases, deterministic)",
+  "suites": {
+    "mitre_accuracy": {
+      "metric": "accuracy",
+      "value": 0.97,
+      "target": 0.8,
+      "passed": true,
+      "duration_ms": 8.3,
+      "details": {
+        "incidents": 200,
+        "correct": 194,
+        "precision": 0.7267,
+        "recall": 0.85,
+        "f1": 0.7835
+      }
+    },
+    "alert_reduction": {
+      "metric": "reduction_ratio",
+      "value": 0.753,
+      "target": 0.7,
+      "passed": true,
+      "duration_ms": 17.9,
+      "details": {
+        "alerts_in": 1000,
+        "incidents_out": 247,
+        "reduction_pct": "75.3%",
+        "storm_incidents": 16
+      }
+    },
+    "investigation_completeness": {
+      "metric": "mean_keyword_coverage",
+      "value": 0.9425,
+      "target": 0.85,
+      "passed": true,
+      "duration_ms": 6.1,
+      "details": {
+        "incidents": 200,
+        "fully_covered": 134,
+        "fully_covered_pct": 0.67
+      }
+    },
+    "response_quality": {
+      "metric": "mean_rubric_score",
+      "value": 1.0,
+      "target": 0.8,
+      "passed": true,
+      "duration_ms": 3.0,
+      "details": {
+        "incidents": 200,
+        "criteria": {
+          "action_aligned": 1.0,
+          "severity_aware": 1.0,
+          "mitre_aligned": 1.0,
+          "evidence_grounded": 1.0,
+          "actionable": 1.0
+        }
+      }
+    }
+  },
+  "all_passed": true
+}
