@@ -1,4 +1,6 @@
 import { PlaybookEditor } from '@/components/playbooks/PlaybookEditor';
+import { ClientOnly } from '@/components/util/ClientOnly';
+import { SkeletonCard } from '@/components/ui/Skeleton';
 
 export const metadata = {
   title: 'Playbook Editor | AiSOC',
@@ -12,7 +14,15 @@ export default async function PlaybookEditorPage({
   const { id } = await params;
   return (
     <div className="h-full">
-      <PlaybookEditor playbookId={id} />
+      <ClientOnly
+        fallback={
+          <div className="space-y-4 p-6">
+            <SkeletonCard />
+          </div>
+        }
+      >
+        <PlaybookEditor playbookId={id} />
+      </ClientOnly>
     </div>
   );
 }

@@ -1,4 +1,6 @@
 import { AlertDetailView } from '@/components/alerts/AlertDetailView';
+import { ClientOnly } from '@/components/util/ClientOnly';
+import { SkeletonCard } from '@/components/ui/Skeleton';
 
 export const metadata = {
   title: 'Alert Detail | AiSOC',
@@ -10,5 +12,16 @@ export default async function AlertDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <AlertDetailView alertId={id} />;
+  return (
+    <ClientOnly
+      fallback={
+        <div className="space-y-4 p-6">
+          <SkeletonCard />
+          <SkeletonCard />
+        </div>
+      }
+    >
+      <AlertDetailView alertId={id} />
+    </ClientOnly>
+  );
 }
