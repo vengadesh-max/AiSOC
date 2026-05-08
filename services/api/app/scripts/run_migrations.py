@@ -35,6 +35,20 @@ CREATE TABLE IF NOT EXISTS aisoc_schema_migrations (
 """
 
 
+async def _raw_execute(conn, sql: str) -> None:
+    """Execute SQL on the underlying asyncpg connection.
+
+    SQLAlchemy's ``text()`` path uses asyncpg's prepared-statement protocol,
+    which cannot handle multi-statement SQL (``cannot insert multiple commands
+    into a prepared statement``). The raw asyncpg ``execute()`` uses the simple
+    query protocol and accepts multi-statement scripts, which is what every
+    file under ``services/api/migrations`` ships.
+    """
+    raw = await conn.get_raw_connection()
+    asyncpg_conn = raw.driver_connection
+    await asyncpg_conn.execute(sql)
+
+
 async def _applied(conn) -> set[str]:
     res = await conn.execute(text("SELECT name FROM aisoc_schema_migrations"))
     return {row[0] for row in res}
@@ -55,7 +69,7 @@ async def _apply_one(name: str, sql: str) -> tuple[str, bool, str | None]:
     """
     try:
         async with engine.begin() as conn:
-            await conn.execute(text(sql))
+            await _raw_execute(conn, sql)
             await _record(conn, name)
         return name, True, None
     except Exception as exc:  # noqa: BLE001 — we intentionally continue on failure
@@ -71,7 +85,7 @@ async def main() -> None:
     logger.info("Found %d migration files", len(files))
 
     async with engine.begin() as conn:
-        await conn.execute(text(CREATE_MIGRATIONS_TABLE))
+        await _raw_execute(conn, CREATE_MIGRATIONS_TABLE)
 
     async with engine.connect() as conn:
         already = await _applied(conn)
