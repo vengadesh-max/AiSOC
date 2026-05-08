@@ -457,15 +457,12 @@ def _make_synthetic_case(tenant_id: uuid.UUID, idx: int, when: datetime, alert_i
         mitre_techniques=techniques,
         alert_ids=[str(a) for a in alert_ids],
         tags=["demo", "synthetic", severity] + tactic_ids[:2],
-        summary=f"Synthetic incident #{idx + 1} for AI investigator evaluation.",
-        event_metadata={
-            "synthetic": True,
-            "expected_tactics": tactic_ids,
-            "expected_techniques": technique_ids,
-            "host": host,
-            "user": user,
-            "src_ip": ip,
-        },
+        summary=(
+            f"Synthetic incident #{idx + 1} for AI investigator evaluation. "
+            f"host={host} user={user} src_ip={ip} "
+            f"expected_tactics={','.join(tactic_ids)} "
+            f"expected_techniques={','.join(technique_ids)}"
+        ),
         created_at=when,
         updated_at=when,
         closed_at=when + timedelta(days=2) if status in ("resolved", "closed") else None,
