@@ -768,15 +768,18 @@ export function CaseWorkspace({ caseId }: { caseId: string }) {
         />
       )}
 
-      {/* Attack path tab — reconstructed graph for this case */}
+      {/* Attack path tab — reconstructed graph for this case.
+          We use the URL `caseId` prop rather than `caseRecord.id` because some
+          backend variants return the case body without an `id` field; the URL
+          is the canonical identifier here. */}
       {activeTab === 'attack-path' && (
-        <AttackPathPanel caseId={caseRecord.id} />
+        <AttackPathPanel caseId={caseRecord.id || caseId} />
       )}
 
       {/* Ledger tab — persistent, replayable agent decision log */}
       {activeTab === 'ledger' && (
         <InvestigationLedger
-          caseId={caseRecord.id}
+          caseId={caseRecord.id || caseId}
           activeRunId={investigationRunId}
           onSelectRun={(rid) => setInvestigationRunId(rid)}
         />
@@ -786,7 +789,7 @@ export function CaseWorkspace({ caseId }: { caseId: string }) {
       {activeTab === 'report' && (
         <ReportPanel
           markdown={reportMd}
-          caseId={caseRecord.id}
+          caseId={caseRecord.id || caseId}
           runId={investigationRunId ?? ''}
         />
       )}
@@ -1136,11 +1139,26 @@ function InvestigationPanel({
  * the agent is wired up but simply has no graph context yet.
  */
 function AttackPathPanel({ caseId }: { caseId: string }) {
+  // Guard: when caseId is falsy (router not yet hydrated, fallback path mid-build,
+  // backend response without an id field) we render the empty state instead of
+  // firing /api/v1/graph/attack-path/undefined which 500s and pollutes the UI.
+  const hasCaseId = Boolean(caseId);
   const { data, error, isLoading } = useSWR<CaseAttackPath | null>(
-    `case:${caseId}:attack-path`,
+    hasCaseId ? `case:${caseId}:attack-path` : null,
     () => graphApi.getCaseAttackPath(caseId, { maxDepth: 4 }),
     { revalidateOnFocus: false },
   );
+
+  if (!hasCaseId) {
+    return (
+      <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-700/60 bg-slate-900/30 py-16 text-center">
+        <p className="text-sm font-medium text-slate-300">Loading case context…</p>
+        <p className="mt-1 max-w-md text-xs text-slate-500">
+          The attack-path graph appears once the case is loaded.
+        </p>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
