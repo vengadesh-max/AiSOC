@@ -538,6 +538,11 @@ export interface CaseTask {
 
 export interface Case {
   id: string;
+  /**
+   * Short, human-friendly case identifier (e.g. ``INC-001``).
+   * Returned by the backend as ``case_number`` and used by demo deeplinks.
+   */
+  caseNumber?: string;
   title: string;
   description?: string;
   status: CaseStatus;
@@ -559,6 +564,36 @@ export interface Case {
   dueAt?: string;
   timeline?: CaseTimelineEvent[];
   tasks?: CaseTask[];
+}
+
+// The backend uses a 6-state lifecycle (`new | triaged | investigating |
+// contained | resolved | closed`) while the web console renders a simpler
+// 5-state model. Without translation, `STATUS_CONFIG[c.status]` returns
+// `undefined` and `<CaseCard>` throws a TypeError, which React surfaces as a
+// blank loading state on /cases. Keep these maps colocated with the Case type.
+const BACKEND_TO_UI_STATUS: Record<string, CaseStatus> = {
+  new: 'open',
+  open: 'open',
+  triaged: 'pending',
+  pending: 'pending',
+  investigating: 'in_progress',
+  in_progress: 'in_progress',
+  contained: 'in_progress',
+  resolved: 'resolved',
+  closed: 'closed',
+};
+
+const UI_TO_BACKEND_STATUS: Record<CaseStatus, string> = {
+  open: 'new',
+  pending: 'triaged',
+  in_progress: 'investigating',
+  resolved: 'resolved',
+  closed: 'closed',
+};
+
+function toUiStatus(raw: unknown): CaseStatus {
+  if (typeof raw !== 'string') return 'open';
+  return BACKEND_TO_UI_STATUS[raw] ?? 'open';
 }
 
 export interface CasesResponse {
@@ -626,11 +661,17 @@ function normalizeCase(raw: unknown): Case {
     (r.updatedAt as string | undefined) ??
     createdAt;
 
+  const caseNumber =
+    (r.case_number as string | undefined) ??
+    (r.caseNumber as string | undefined) ??
+    undefined;
+
   return {
     id: String(r.id ?? ''),
+    caseNumber,
     title: String(r.title ?? ''),
     description: (r.description as string | undefined) ?? undefined,
-    status: (r.status as Case['status']) ?? 'open',
+    status: toUiStatus(r.status),
     severity: (r.severity as Case['severity']) ?? 'medium',
     priority: (r.priority as Case['severity'] | undefined) ?? (r.severity as Case['severity'] | undefined),
     assignee: (r.assignee as string | null | undefined) ?? undefined,
@@ -693,9 +734,20 @@ function normalizeCasesResponse(raw: unknown, filters: CaseFilters = {}): CasesR
 
 export const casesApi = {
   list: async (filters: CaseFilters = {}) => {
-    const raw = await request<unknown>('/api/v1/cases', {
-      params: filters as Record<string, string>,
-    });
+    // Translate UI status filter into the backend lifecycle vocabulary so
+    // querying "In Progress" in the console actually returns rows where the
+    // backend stored "investigating".
+    const params: Record<string, string> = {};
+    for (const [key, value] of Object.entries(filters)) {
+      if (value === undefined || value === null || value === '') continue;
+      if (key === 'status' && typeof value === 'string' && value !== 'all') {
+        params.status =
+          UI_TO_BACKEND_STATUS[value as CaseStatus] ?? value;
+        continue;
+      }
+      params[key] = String(value);
+    }
+    const raw = await request<unknown>('/api/v1/cases', { params });
     return normalizeCasesResponse(raw, filters);
   },
 

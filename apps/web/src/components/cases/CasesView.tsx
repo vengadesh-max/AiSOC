@@ -58,11 +58,15 @@ const STATUS_CONFIG: Record<
 // ─── Case Card ────────────────────────────────────────────────────────────────
 
 function CaseCard({ c }: { c: Case }) {
-  const sev = SEVERITY_CONFIG[c.severity];
-  const sts = STATUS_CONFIG[c.status];
+  const sev = SEVERITY_CONFIG[c.severity] ?? SEVERITY_CONFIG.medium;
+  // Defensive: if normalization missed an unexpected status string, fall back
+  // to "open" styling so the entire list never blanks the page.
+  const sts = STATUS_CONFIG[c.status] ?? STATUS_CONFIG.open;
+  const displayId = c.caseNumber ?? `${c.id ?? ''}`.slice(-6);
+  const detailHref = `/cases/${encodeURIComponent(c.caseNumber ?? c.id)}`;
 
   return (
-    <Link href={`/cases/${c.id}`} className="block">
+    <Link href={detailHref} className="block">
       <div className="bg-gray-900/60 border border-gray-800/60 rounded-xl p-5 hover:border-gray-700 hover:bg-gray-900/80 transition-all group">
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
@@ -77,9 +81,9 @@ function CaseCard({ c }: { c: Case }) {
             </div>
             <h3 className="text-sm font-medium text-gray-200 group-hover:text-white truncate">{c.title}</h3>
             <div className="flex items-center gap-3 mt-2">
-              <span className="text-xs text-gray-500">#{c.id.slice(-6)}</span>
+              <span className="text-xs text-gray-500">#{displayId}</span>
               <span className="text-xs text-gray-500">·</span>
-              <span className="text-xs text-gray-500">{c.alertCount} alerts</span>
+              <span className="text-xs text-gray-500">{c.alertCount ?? 0} alerts</span>
               {c.assignee && (
                 <>
                   <span className="text-xs text-gray-500">·</span>
