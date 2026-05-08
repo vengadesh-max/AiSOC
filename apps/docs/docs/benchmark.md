@@ -258,7 +258,7 @@ This catches a broken templating pipeline (e.g. someone removes the MITRE
 references from the synthesizer, or the rubric stops matching) — it is
 **not** a grade of LLM-written response plans.
 
-### 5. Synthetic telemetry corpus — `Schema and coverage gate`
+### 5. Synthetic telemetry corpus — `Schema and coverage gate` {#5-synthetic-telemetry-corpus}
 
 **Source:** [`services/agents/tests/test_synthetic_telemetry.py`](https://github.com/beenuar/AiSOC/blob/main/services/agents/tests/test_synthetic_telemetry.py)
 · **Output:** [`synthetic_telemetry.jsonl`](https://github.com/beenuar/AiSOC/blob/main/services/agents/tests/eval_data/synthetic_telemetry.jsonl)
@@ -368,7 +368,7 @@ python3 scripts/run_evals.py --json --out report.json
 
 Submissions go through a structured GitHub issue template
 ([`.github/ISSUE_TEMPLATE/benchmark_submission.yml`](https://github.com/beenuar/AiSOC/blob/main/.github/ISSUE_TEMPLATE/benchmark_submission.yml)).
-Accepted entries are rendered on the [benchmark scoreboard](/benchmark) in the
+Accepted entries are rendered on the [benchmark scoreboard](https://tryaisoc.com/benchmark) in the
 web console. Submission rules:
 
 1. **Same fixed dataset** — run against the deterministic 200-incident dataset on the commit you submit. No private fixtures.
