@@ -216,6 +216,34 @@ attach_redis() {
 }
 
 # 1. api   build context = services/api/
+#
+# Stage marketplace/index.json into the api build context. The api Dockerfile
+# does `COPY . .` against services/api/, so anything outside that dir is
+# invisible to the image. The runtime marketplace endpoint
+# (services/api/app/api/v1/endpoints/marketplace.py) looks for
+# /app/marketplace/index.json and returns HTTP 503 if the file is missing.
+# Without this step, /api/v1/marketplace serves "Service Unavailable" on every
+# fresh deploy.
+#
+# We rebuild the index from source on every deploy (instead of copying a
+# possibly-stale checked-in file) so plugin metadata changes always flip live
+# in the same release as the code change. The staged copy is gitignored.
+stage_marketplace_index() {
+  local src="$REPO_ROOT/marketplace/index.json"
+  local dst_dir="$REPO_ROOT/services/api/marketplace"
+  local dst="$dst_dir/index.json"
+  log "rebuilding marketplace/index.json from plugins/*/plugin.yaml"
+  ( cd "$REPO_ROOT" && python3 scripts/build_marketplace.py >/dev/null )
+  if [[ ! -f "$src" ]]; then
+    err "marketplace/index.json missing after build  cannot stage for api deploy"
+    exit 1
+  fi
+  mkdir -p "$dst_dir"
+  cp "$src" "$dst"
+  log "  staged $(wc -c < "$dst" | tr -d ' ') bytes  $dst"
+}
+stage_marketplace_index
+
 ensure_app   aisoc-demo-api
 attach_pg    aisoc-demo-api
 attach_redis aisoc-demo-api
