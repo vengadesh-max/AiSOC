@@ -3424,6 +3424,135 @@ export const reportsApi = {
   },
 };
 
+// ─── Audit log / compliance bundle helpers ──────────────────────────────────
+
+/**
+ * Filters accepted by the audit-log export endpoint. Mirrors the query
+ * parameters supported by ``GET /api/v1/audit/export`` so the UI layer can
+ * forward whatever the analyst is currently filtering on without translation.
+ */
+export type AuditExportFilters = {
+  action?: string;
+  resource?: string;
+  actor_id?: string;
+  search?: string;
+  /** Hard cap to keep a single export bounded — defaults to API max (10 000). */
+  limit?: number;
+};
+
+function buildAuditExportSearch(
+  filters: AuditExportFilters,
+  format: 'csv' | 'html',
+): URLSearchParams {
+  const search = new URLSearchParams({ format });
+  if (filters.action) search.set('action', filters.action);
+  if (filters.resource) search.set('resource', filters.resource);
+  if (filters.actor_id) search.set('actor_id', filters.actor_id);
+  if (filters.search) search.set('search', filters.search);
+  if (typeof filters.limit === 'number' && filters.limit > 0) {
+    search.set('limit', String(filters.limit));
+  }
+  return search;
+}
+
+function buildAuditExportHeaders(accept: string): Record<string, string> {
+  const headers: Record<string, string> = {
+    Accept: accept,
+    'X-Tenant-Id': TENANT_ID,
+  };
+  if (typeof window !== 'undefined') {
+    try {
+      const token = window.localStorage.getItem(AUTH_TOKEN_KEY);
+      if (token) headers.Authorization = `Bearer ${token}`;
+    } catch {
+      /* localStorage unavailable; ignore */
+    }
+  }
+  return headers;
+}
+
+export const auditApi = {
+  /**
+   * WS-H3 — download the (filtered) audit trail as RFC 4180 CSV. Returns the
+   * raw CSV body so the UI can wrap it in a Blob and trigger a download via
+   * an anchor click. Going through ``fetch`` (instead of a plain anchor) lets
+   * us forward the bearer token from localStorage and surface an
+   * ``ApiError`` if the export is rejected (e.g. missing audit_log:read).
+   */
+  exportCsv: async (filters: AuditExportFilters = {}): Promise<{ body: string; filename: string }> => {
+    const url = `${API_BASE}/api/v1/audit/export?${buildAuditExportSearch(filters, 'csv').toString()}`;
+    const response = await fetch(url, {
+      headers: buildAuditExportHeaders('text/csv'),
+      cache: 'no-store',
+    });
+    if (!response.ok) {
+      const detail = await response.text().catch(() => '');
+      throw new ApiError(
+        `API ${response.status} ${response.statusText} — /audit/export?format=csv`,
+        response.status,
+        detail,
+      );
+    }
+    const filename = parseFilenameFromContentDisposition(
+      response.headers.get('Content-Disposition'),
+      `aisoc-audit-${timestampSlug()}.csv`,
+    );
+    const body = await response.text();
+    return { body, filename };
+  },
+
+  /**
+   * WS-H3 — fetch the print-ready HTML bundle of the (filtered) audit trail.
+   * Mirrors ``reportsApi.weeklyDigestHtml``: pop the result into a new tab and
+   * let the browser's native "Save as PDF" produce the compliance binder, no
+   * server-side weasyprint dependency required.
+   */
+  exportHtml: async (filters: AuditExportFilters = {}): Promise<{ html: string; filename: string }> => {
+    const url = `${API_BASE}/api/v1/audit/export?${buildAuditExportSearch(filters, 'html').toString()}`;
+    const response = await fetch(url, {
+      headers: buildAuditExportHeaders('text/html'),
+      cache: 'no-store',
+    });
+    if (!response.ok) {
+      const detail = await response.text().catch(() => '');
+      throw new ApiError(
+        `API ${response.status} ${response.statusText} — /audit/export?format=html`,
+        response.status,
+        detail,
+      );
+    }
+    const filename = parseFilenameFromContentDisposition(
+      response.headers.get('Content-Disposition'),
+      `aisoc-audit-${timestampSlug()}.html`,
+    );
+    const html = await response.text();
+    return { html, filename };
+  },
+};
+
+/** Parse ``filename="…"`` out of a Content-Disposition header. */
+function parseFilenameFromContentDisposition(
+  header: string | null,
+  fallback: string,
+): string {
+  if (!header) return fallback;
+  // Match RFC 6266 filename="…" — quoted form is what FastAPI emits for us.
+  const match = header.match(/filename="([^"]+)"/i);
+  return match ? match[1] : fallback;
+}
+
+/** ``20260509T234501Z`` style slug for client-side filenames. */
+function timestampSlug(): string {
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  return (
+    `${now.getUTCFullYear()}` +
+    `${pad(now.getUTCMonth() + 1)}` +
+    `${pad(now.getUTCDate())}` +
+    `T${pad(now.getUTCHours())}${pad(now.getUTCMinutes())}${pad(now.getUTCSeconds())}Z`
+  );
+}
+
 // ─── Realtime / WebSocket helpers ────────────────────────────────────────────
 
 export const realtimeApi = {

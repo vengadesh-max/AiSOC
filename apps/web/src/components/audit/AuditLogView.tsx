@@ -2,8 +2,10 @@
 
 import { useState, useCallback } from 'react';
 import useSWR from 'swr';
+import toast from 'react-hot-toast';
 import { EmptyState, EmptyStateIcons } from '@/components/ui/EmptyState';
 import { ErrorState } from '@/components/ui/ErrorState';
+import { auditApi, ApiError, type AuditExportFilters } from '@/lib/api';
 
 interface AuditEvent {
   id: string;
@@ -72,6 +74,10 @@ export function AuditLogView() {
   const [actionFilter, setActionFilter] = useState('');
   const [resourceFilter, setResourceFilter] = useState('');
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  // WS-H3 — export-bundle UX state. We model the two formats as a single
+  // exclusive lock so the analyst can't double-fire CSV + HTML and end up
+  // with two browser save dialogs racing each other.
+  const [exporting, setExporting] = useState<'csv' | 'html' | null>(null);
 
   const params = new URLSearchParams({ page: String(page), page_size: '50' });
   if (search) params.set('search', search);
@@ -91,20 +97,162 @@ export function AuditLogView() {
     setPage(1);
   }, []);
 
+  // Build the filter payload once so CSV and HTML stay in lock-step with the
+  // table. We deliberately send only the filter knobs the export endpoint
+  // understands — page/page_size are list-view concerns, not export ones.
+  const buildExportFilters = useCallback((): AuditExportFilters => {
+    const filters: AuditExportFilters = {};
+    if (search) filters.search = search;
+    if (actionFilter) filters.action = actionFilter;
+    if (resourceFilter) filters.resource = resourceFilter;
+    return filters;
+  }, [search, actionFilter, resourceFilter]);
+
+  /**
+   * Trigger a CSV download of the (filtered) audit trail. We go through fetch
+   * (rather than a plain anchor href) so we can attach the bearer token,
+   * surface a toast on auth failure, and disable the button while the
+   * server is streaming.
+   */
+  const handleExportCsv = useCallback(async () => {
+    if (exporting) return;
+    setExporting('csv');
+    try {
+      const { body, filename } = await auditApi.exportCsv(buildExportFilters());
+      const blob = new Blob([body], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success(`Exported ${filename}`);
+    } catch (e) {
+      const msg = e instanceof ApiError
+        ? `Couldn't export audit log (HTTP ${e.status}). ${e.status === 403 ? 'Your role lacks audit_log:read.' : 'Try again.'}`
+        : "Couldn't export audit log. Try again.";
+      toast.error(msg);
+    } finally {
+      setExporting(null);
+    }
+  }, [buildExportFilters, exporting]);
+
+  /**
+   * Open the print-ready HTML bundle in a new tab. The browser's native
+   * "Save as PDF" produces the compliance binder — same pattern as the
+   * weekly digest report (WS-G2). No server-side weasyprint required.
+   */
+  const handleExportHtml = useCallback(async () => {
+    if (exporting) return;
+    setExporting('html');
+    try {
+      const { html } = await auditApi.exportHtml(buildExportFilters());
+      // Pop into a new tab via Blob URL — survives strict-CSP environments
+      // better than document.write, and gives the user a real file:// style
+      // experience for the print dialog.
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const win = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!win) {
+        toast.error('Pop-up blocked — allow pop-ups to view the export.');
+      } else {
+        // Give the new tab time to load before we revoke; revoking
+        // immediately can null out the contents on slower browsers.
+        setTimeout(() => URL.revokeObjectURL(url), 30_000);
+        toast.success('Opened audit-log export. Use your browser to save as PDF.');
+      }
+    } catch (e) {
+      const msg = e instanceof ApiError
+        ? `Couldn't open audit export (HTTP ${e.status}). ${e.status === 403 ? 'Your role lacks audit_log:read.' : 'Try again.'}`
+        : "Couldn't open audit export. Try again.";
+      toast.error(msg);
+    } finally {
+      setExporting(null);
+    }
+  }, [buildExportFilters, exporting]);
+
+  const exportDisabled = exporting !== null || (data?.items.length ?? 0) === 0;
+
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-bold">Audit Log</h1>
           <p className="text-sm text-gray-400 mt-1">
             Immutable record of all platform actions
           </p>
         </div>
-        {data && (
-          <span className="text-sm text-gray-500">
-            {data.total.toLocaleString()} total events
-          </span>
-        )}
+        <div className="flex items-center gap-3">
+          {data && (
+            <span className="text-sm text-gray-500">
+              {data.total.toLocaleString()} total events
+            </span>
+          )}
+          {/* WS-H3 — compliance bundle exports. Both buttons honour the
+             current filter set so an analyst can scope a binder to e.g.
+             "all role grants in the last week" without server-side gymnastics. */}
+          <div
+            className="flex items-center gap-2"
+            role="group"
+            aria-label="Export audit log"
+          >
+            <button
+              type="button"
+              onClick={handleExportCsv}
+              disabled={exportDisabled}
+              title={
+                exportDisabled && (data?.items.length ?? 0) === 0
+                  ? 'Nothing to export with the current filters'
+                  : 'Download the filtered audit trail as RFC 4180 CSV'
+              }
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-gray-600 bg-gray-800 text-gray-200 hover:bg-gray-700 hover:border-gray-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-4 h-4"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M10 3a.75.75 0 01.75.75v8.69l2.72-2.72a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 011.06-1.06l2.72 2.72V3.75A.75.75 0 0110 3zM3.75 14a.75.75 0 01.75.75V16h11v-1.25a.75.75 0 011.5 0V16a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 013 16v-1.25a.75.75 0 01.75-.75z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {exporting === 'csv' ? 'Exporting…' : 'Export CSV'}
+            </button>
+            <button
+              type="button"
+              onClick={handleExportHtml}
+              disabled={exportDisabled}
+              title={
+                exportDisabled && (data?.items.length ?? 0) === 0
+                  ? 'Nothing to export with the current filters'
+                  : 'Open a print-ready HTML bundle (use browser to Save as PDF)'
+              }
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-indigo-500/40 bg-indigo-500/10 text-indigo-200 hover:bg-indigo-500/20 disabled:opacity-50 disabled:cursor-not-allowed transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-4 h-4"
+                aria-hidden="true"
+              >
+                <path d="M5 4a2 2 0 00-2 2v1h14V6a2 2 0 00-2-2H5z" />
+                <path
+                  fillRule="evenodd"
+                  d="M3 9h14v5a2 2 0 01-2 2H5a2 2 0 01-2-2V9zm4 2a1 1 0 100 2h6a1 1 0 100-2H7z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              {exporting === 'html' ? 'Opening…' : 'Export PDF (HTML)'}
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Filters */}
