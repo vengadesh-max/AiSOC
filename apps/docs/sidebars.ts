@@ -50,6 +50,8 @@ const sidebars: SidebarsConfig = {
         "connectors/tailscale",
         "connectors/osctrl",
         "connectors/fleetdm",
+        "connectors/aisoc-direct",
+        "connectors/osquery-tls",
         "connectors/osquery-extensions",
       ],
     },

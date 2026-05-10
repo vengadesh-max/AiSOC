@@ -11,7 +11,7 @@ import (
 	"github.com/beenuar/aisoc/osquery-extensions/internal/aisocapi"
 	"github.com/beenuar/aisoc/osquery-extensions/internal/config"
 	"github.com/beenuar/aisoc/osquery-extensions/tables"
-	"github.com/kolide/osquery-go/plugin/table"
+	"github.com/osquery/osquery-go/plugin/table"
 )
 
 func TestPendingActionsGenerate(t *testing.T) {

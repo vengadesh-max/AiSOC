@@ -27,6 +27,12 @@
 /services/ingest/                   @beenuar
 /services/demo-producer/            @beenuar
 
+# osquery TLS service (PR4)
+/services/osquery-tls/              @beenuar
+
+# osquery custom extensions — Go module (PR6)
+/services/osquery-extensions/       @beenuar
+
 # Infra / DevOps
 /infra/                             @beenuar
 /.github/                           @beenuar
@@ -36,3 +42,10 @@
 
 # Detections (requires extra review)
 /detections/                        @beenuar
+
+# Osquery packs & FIM content (PR5)
+/packs/                             @beenuar
+
+# Marketplace & connector plugins
+/plugins/                           @beenuar
+/marketplace/                       @beenuar

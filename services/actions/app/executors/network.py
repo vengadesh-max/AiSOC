@@ -18,7 +18,7 @@ from datetime import datetime
 
 import structlog
 
-from app.clients.aws_security_groups import AWSSecurityGroupsClient
+from app.clients.aws_security_groups import AWSSGClient as AWSSecurityGroupsClient
 from app.executors.base import BaseExecutor, _SIM_FUNNEL_CTA
 from app.models.action import ActionRequest, ActionResult, ActionStatus, BlastRadius
 

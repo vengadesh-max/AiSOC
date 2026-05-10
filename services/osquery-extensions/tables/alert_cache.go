@@ -5,7 +5,7 @@ import (
 	"log"
 
 	"github.com/beenuar/aisoc/osquery-extensions/internal/aisocapi"
-	"github.com/kolide/osquery-go/plugin/table"
+	"github.com/osquery/osquery-go/plugin/table"
 )
 
 // AlertCacheColumns returns the column schema for aisoc_alert_cache.

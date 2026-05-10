@@ -210,6 +210,69 @@ async def _handle_close_case(step: PlaybookStep, context: dict[str, Any], http: 
     return {"case_id": case_id, "status": "closed"}
 
 
+async def _handle_osquery_live_query(
+    step: PlaybookStep, context: dict[str, Any], http: httpx.AsyncClient  # noqa: ARG001
+) -> dict:
+    """Dispatch an osquery live query to one of the three supported backends.
+
+    Required params
+    ---------------
+    template : str
+        Approved query template ID from ``osquery_allowlist.py``.
+
+    Optional params
+    ---------------
+    backend : "osctrl" | "fleetdm" | "aisoc_direct" (default "aisoc_direct")
+    target_hosts : list[str]   — host identifiers; empty ⇒ all online hosts
+    template_params : dict     — forwarded to the template renderer
+    timeout_seconds : int      — per-backend default applies when omitted
+
+    Configuration (via environment)
+    --------------------------------
+    OSCTRL_URL / OSCTRL_TOKEN / OSCTRL_ENVIRONMENT
+    FLEETDM_URL / FLEETDM_TOKEN
+    AISOC_OSQUERY_TLS_URL (handled inside aisoc_direct_client)
+    """
+    backend = step.params.get("backend", "aisoc_direct")
+    template = step.params.get("template", "")
+    target_hosts: list[str] = step.params.get("target_hosts") or context.get("target_hosts") or []
+    template_params: dict[str, Any] = step.params.get("template_params", {})
+    timeout_seconds: int = step.params.get("timeout_seconds", step.timeout_seconds)
+
+    if not template:
+        return {"error": "osquery_live_query step missing required 'template' param"}
+
+    try:
+        if backend == "osctrl":
+            from app.clients.osctrl_client import OsctrlClient  # noqa: PLC0415
+
+            client = OsctrlClient(
+                base_url=os.getenv("OSCTRL_URL", "http://osctrl:9000"),
+                api_token=os.getenv("OSCTRL_TOKEN", ""),
+                environment=os.getenv("OSCTRL_ENVIRONMENT", "default"),
+            )
+            return await client.live_query(target_hosts, template, template_params, timeout_seconds)
+
+        elif backend == "fleetdm":
+            from app.clients.fleetdm_client import FleetDMClient  # noqa: PLC0415
+
+            client = FleetDMClient(
+                base_url=os.getenv("FLEETDM_URL", "http://fleet:8080"),
+                api_token=os.getenv("FLEETDM_TOKEN", ""),
+            )
+            return await client.live_query(target_hosts, template, template_params, timeout_seconds)
+
+        else:  # aisoc_direct
+            from app.clients.aisoc_direct_client import AiSOCDirectClient  # noqa: PLC0415
+
+            client = AiSOCDirectClient()
+            return await client.live_query(target_hosts, template, template_params, timeout_seconds)
+
+    except Exception as exc:  # noqa: BLE001
+        logger.error("osquery_live_query via %s failed: %s", backend, exc)
+        return {"error": str(exc), "backend": backend}
+
+
 _HANDLERS = {
     StepType.ENRICH: _handle_enrich,
     StepType.INVESTIGATE: _handle_investigate,
@@ -219,6 +282,7 @@ _HANDLERS = {
     StepType.ISOLATE_HOST: _handle_isolate_host,
     StepType.CREATE_TICKET: _handle_create_ticket,
     StepType.CLOSE_CASE: _handle_close_case,
+    StepType.OSQUERY_LIVE_QUERY: _handle_osquery_live_query,
 }
 
 

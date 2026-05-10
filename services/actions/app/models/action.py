@@ -45,6 +45,8 @@ class ActionType(str, Enum):
     CREATE_NOTABLE_EVENT = "create_notable_event"
     SYNC_DETECTION_RULE = "sync_detection_rule"
     UPDATE_WATCHER = "update_watcher"
+    # osquery live query — targets osctrl, FleetDM, or AiSOC direct TLS service
+    OSQUERY_LIVE_QUERY = "osquery_live_query"
 
 
 class ActionStatus(str, Enum):

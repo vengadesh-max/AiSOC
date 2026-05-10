@@ -7,6 +7,7 @@ ActionRequest.parameters — no credentials = safe, observable simulation.
 """
 
 from app.executors.chatops import ChatOpsVerifyExecutor
+from app.executors.osquery import LiveQueryExecutor
 from app.executors.endpoint import (
     IsolateHostExecutor,
     KillProcessExecutor,
@@ -57,4 +58,6 @@ EXECUTOR_REGISTRY = {
     ActionType.NOTIFY_SLACK: NotifySlackExecutor(),
     ActionType.CREATE_TICKET: CreateTicketExecutor(),
     ActionType.CHATOPS_VERIFY: ChatOpsVerifyExecutor(),
+    # osquery live queries (osctrl / FleetDM / AiSOC direct TLS)
+    ActionType.OSQUERY_LIVE_QUERY: LiveQueryExecutor(),
 }

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from app.connectors.aisoc_direct import AiSOCDirectConnector
 from app.connectors.auth0 import Auth0Connector
 from app.connectors.aws_security_hub import AWSSecurityHubConnector
 from app.connectors.azure_activity import AzureActivityConnector
@@ -70,6 +71,7 @@ if TYPE_CHECKING:
 # Keep alphabetised by connector_id for predictable diffs.
 _CONNECTOR_CLASSES: tuple[type[BaseConnector], ...] = (
     AWSSecurityHubConnector,
+    AiSOCDirectConnector,
     Auth0Connector,
     AzureActivityConnector,
     AzureDefenderConnector,
@@ -158,6 +160,7 @@ def list_connector_schemas() -> list[dict]:
 
 __all__ = [
     "AWSSecurityHubConnector",
+    "AiSOCDirectConnector",
     "Auth0Connector",
     "AzureActivityConnector",
     "AzureDefenderConnector",

@@ -7,7 +7,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/kolide/osquery-go/plugin/table"
+	"github.com/osquery/osquery-go/plugin/table"
 )
 
 // KernelModulesVerifiedColumns returns the column schema for

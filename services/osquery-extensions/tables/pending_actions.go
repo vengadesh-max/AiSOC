@@ -6,7 +6,7 @@ import (
 	"log"
 
 	"github.com/beenuar/aisoc/osquery-extensions/internal/aisocapi"
-	"github.com/kolide/osquery-go/plugin/table"
+	"github.com/osquery/osquery-go/plugin/table"
 )
 
 // PendingActionsColumns returns the column schema for aisoc_pending_actions.

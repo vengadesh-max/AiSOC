@@ -16,8 +16,8 @@ import (
 	"github.com/beenuar/aisoc/osquery-extensions/internal/aisocapi"
 	"github.com/beenuar/aisoc/osquery-extensions/internal/config"
 	"github.com/beenuar/aisoc/osquery-extensions/tables"
-	osquery "github.com/kolide/osquery-go"
-	"github.com/kolide/osquery-go/plugin/table"
+	osquery "github.com/osquery/osquery-go"
+	"github.com/osquery/osquery-go/plugin/table"
 )
 
 func main() {
