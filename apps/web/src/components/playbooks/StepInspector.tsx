@@ -2,13 +2,29 @@
 
 /**
  * StepInspector
- * Right-side panel showing details for the selected step.
- * Allows editing name, type, params, on_failure, condition.
+ * =============
+ *
+ * Right-side panel for the selected playbook step. Now schema-driven:
+ * each step type renders a typed form (string, number, select, env-ref,
+ * jsonpath, textarea) sourced from `stepSchemas`. The previous free-form
+ * JSON textarea is preserved as an "Advanced (raw JSON)" escape hatch
+ * inside `SchemaForm` so power users keep parity.
+ *
+ * Behaviour notes:
+ *   - When the step kind changes, params are reset to the schema's
+ *     defaults (mixing kinds would otherwise leave orphaned keys).
+ *   - The `condition` editor still applies to every step kind; it
+ *     gates whether the step runs (and, for `condition` steps, drives
+ *     true/false branching on the canvas).
+ *   - `validateStepParams` is run on every change and surfaced in the
+ *     form so users see required-field issues before saving.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { PlaybookStep, StepType, OnFailure } from './types';
 import { STEP_TYPE_META } from './stepColors';
+import { STEP_SCHEMAS, defaultParamsFor, validateStepParams } from './stepSchemas';
+import { SchemaForm } from './SchemaForm';
 
 const ALL_TYPES: StepType[] = [
   'enrich',
@@ -47,7 +63,22 @@ export function StepInspector({
     onUpdate(next);
   }
 
+  function changeType(nextType: StepType) {
+    if (nextType === local.type) return;
+    // Reset params to the new schema's defaults so the form doesn't render
+    // a sea of "extra params present" warnings.
+    update({
+      type: nextType,
+      params: defaultParamsFor(nextType),
+    });
+  }
+
   const meta = STEP_TYPE_META[local.type];
+  const schema = STEP_SCHEMAS[local.type];
+  const validationErrors = useMemo(
+    () => validateStepParams(local.type, local.params ?? {}),
+    [local.type, local.params],
+  );
 
   return (
     <div className="h-full overflow-y-auto p-4 space-y-4 text-sm">
@@ -55,7 +86,14 @@ export function StepInspector({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span style={{ color: meta.color, fontSize: 18 }}>{meta.icon}</span>
-          <span style={{ color: meta.color, fontWeight: 700, fontSize: 12, textTransform: 'uppercase' }}>
+          <span
+            style={{
+              color: meta.color,
+              fontWeight: 700,
+              fontSize: 12,
+              textTransform: 'uppercase',
+            }}
+          >
             {meta.label}
           </span>
         </div>
@@ -68,6 +106,12 @@ export function StepInspector({
           </button>
         )}
       </div>
+
+      {schema.description && (
+        <div className="text-xs text-gray-500 leading-relaxed">
+          {schema.description}
+        </div>
+      )}
 
       {/* Name */}
       <div>
@@ -85,7 +129,7 @@ export function StepInspector({
         <label className="block text-gray-400 text-xs mb-1">Step Type</label>
         <select
           value={local.type}
-          onChange={(e) => update({ type: e.target.value as StepType })}
+          onChange={(e) => changeType(e.target.value as StepType)}
           disabled={readOnly}
           className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-white text-sm focus:outline-none focus:border-blue-500 disabled:opacity-60"
         >
@@ -133,7 +177,9 @@ export function StepInspector({
             min={1}
             max={600}
             value={local.timeout_seconds}
-            onChange={(e) => update({ timeout_seconds: Number(e.target.value) })}
+            onChange={(e) =>
+              update({ timeout_seconds: Number(e.target.value) })
+            }
             disabled={readOnly}
             className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-1.5 text-white text-sm focus:outline-none focus:border-blue-500 disabled:opacity-60"
           />
@@ -142,7 +188,9 @@ export function StepInspector({
 
       {/* Condition */}
       <div>
-        <label className="block text-gray-400 text-xs mb-1">Condition (optional)</label>
+        <label className="block text-gray-400 text-xs mb-1">
+          Condition (optional)
+        </label>
         <div className="space-y-2 border border-gray-700 rounded p-3">
           <div>
             <input
@@ -168,7 +216,13 @@ export function StepInspector({
                 update({
                   condition: {
                     field: local.condition?.field ?? '',
-                    operator: e.target.value as 'eq' | 'ne' | 'gt' | 'lt' | 'contains' | 'exists',
+                    operator: e.target.value as
+                      | 'eq'
+                      | 'ne'
+                      | 'gt'
+                      | 'lt'
+                      | 'contains'
+                      | 'exists',
                     value: local.condition?.value,
                   },
                 })
@@ -211,22 +265,15 @@ export function StepInspector({
         </div>
       </div>
 
-      {/* Params (JSON editor) */}
+      {/* Params — schema-driven */}
       <div>
-        <label className="block text-gray-400 text-xs mb-1">Params (JSON)</label>
-        <textarea
-          rows={5}
-          value={JSON.stringify(local.params, null, 2)}
-          onChange={(e) => {
-            try {
-              const parsed = JSON.parse(e.target.value);
-              update({ params: parsed });
-            } catch {
-              /* ignore parse errors while typing */
-            }
-          }}
-          disabled={readOnly}
-          className="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-green-400 font-mono text-xs focus:outline-none focus:border-blue-500 disabled:opacity-60"
+        <label className="block text-gray-400 text-xs mb-1">Params</label>
+        <SchemaForm
+          schema={schema}
+          value={(local.params ?? {}) as Record<string, unknown>}
+          onChange={(next) => update({ params: next })}
+          readOnly={readOnly}
+          validationErrors={validationErrors}
         />
       </div>
 
