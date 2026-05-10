@@ -9,7 +9,7 @@ An open-source, self-hostable AI SOC. The agent's prompts, tool calls, and ratio
 [![License: MIT](https://img.shields.io/badge/License-MIT-22c55e.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 [![Public eval harness: CI-gated](https://img.shields.io/badge/eval%20harness-CI--gated-2563eb?style=flat-square)](apps/docs/docs/benchmark.md)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-8b5cf6?style=flat-square)](CONTRIBUTING.md)
-[![Version](https://img.shields.io/badge/version-7.0.2-f59e0b?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-7.0.3-f59e0b?style=flat-square)](CHANGELOG.md)
 
 [Live demo](https://tryaisoc.com) · [How AiSOC compares](#how-aisoc-compares) · [Public eval harness](apps/docs/docs/benchmark.md) · [Deploy in 60 seconds](#deploy-in-60-seconds) · [Deployment options](#deployment-options) · [Architecture](#architecture) · [Docs](apps/docs/)
 

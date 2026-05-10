@@ -5,6 +5,25 @@ All notable changes to AiSOC will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [7.0.3] — 2026-05-10
+
+### Fixed — Hydration mismatch, font preload warnings
+
+#### Web app (`apps/web/`)
+
+- **`src/components/layout/AppShell.tsx`**: Wrapped `<DemoBanner />` in a new
+  `<ClientOnly>` boundary so the banner (which reads `NEXT_PUBLIC_DEMO_MODE`)
+  is never server-rendered. This eliminates React hydration error #418 caused by
+  stale env-var inlining producing a structural tree mismatch (server saw
+  `<button>` from Sidebar, client expected `<div>` from DemoBanner).
+- **`src/app/layout.tsx`**: Added `preload: false` to the `JetBrains_Mono`
+  `next/font/google` config. The monospace font is only used in code blocks and
+  is not needed on the initial paint of most pages, causing Chrome to log
+  "preloaded but not used within a few seconds" warnings. Lazy-loading the font
+  eliminates these warnings without any visible FOUT.
+
+---
+
 ## [7.0.2] — 2026-05-10
 
 ### Fixed — Version alignment, landing-page footer, documentation

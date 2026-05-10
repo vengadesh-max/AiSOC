@@ -38,7 +38,16 @@ export function AppShell({ children }: AppShellProps) {
       */}
       <DemoAutoLogin />
       <div className="min-h-screen bg-surface-base">
-        <DemoBanner />
+        {/*
+          DemoBanner reads `NEXT_PUBLIC_DEMO_MODE`, a build-time env var.
+          In development the client bundle can have a stale inlined value that
+          differs from the SSR process.env read, producing React hydration
+          error #418. Wrapping in ClientOnly defers the banner to after mount
+          so both paints see the same value (client-only, post-hydration).
+        */}
+        <ClientOnly>
+          <DemoBanner />
+        </ClientOnly>
         <Sidebar />
         <div className="md:ml-60">
           <TopBar demoOffset={demo} />

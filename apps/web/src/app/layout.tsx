@@ -17,6 +17,9 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
+  // Only load on demand — monospace font is used in code blocks, not every page,
+  // so preloading eagerly causes "preloaded but unused" browser warnings.
+  preload: false,
 });
 
 const siteUrl = getPublicSiteUrl();
