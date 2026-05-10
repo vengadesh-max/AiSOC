@@ -24,7 +24,7 @@
  *   - Export full ledger as signed JSON for auditor handoff
  */
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import useSWR from 'swr';
 import { clsx } from 'clsx';
 import { format, formatDistanceToNow } from 'date-fns';
@@ -40,6 +40,8 @@ import {
 } from '@/lib/api';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { ReplayControls } from '@/components/cases/replay/ReplayControls';
+import { useReplayController } from '@/components/cases/replay/useReplayController';
 
 // ─── Style maps ───────────────────────────────────────────────────────────────
 
@@ -209,6 +211,41 @@ export function InvestigationLedger({
     setSelectedSeq(null);
   }, [resolvedRunId]);
 
+  // ─── Replay controller ────────────────────────────────────────────────────
+  // Drives `selectedSeq` through `filteredEvents` like a media player so an
+  // auditor can step (or auto-play) through the agent's decisions instead of
+  // staring at a wall of rows. We pass `filteredEvents` (not the full list) so
+  // the kind/agent filter scopes the replay too — handy for replaying just the
+  // tool calls. While a run is still streaming we disable replay: tailing the
+  // tip + auto-advancing the cursor would fight each other.
+  const replay = useReplayController({
+    events: filteredEvents,
+    selectedSeq,
+    setSelectedSeq,
+    enabled: !isLive,
+  });
+
+  // The current event under the replay cursor — passed to ReplayControls for
+  // its trailing label, and used as the "you are here" marker for auto-scroll.
+  const currentReplayEvent = useMemo<LedgerEvent | null>(() => {
+    if (selectedSeq == null) return null;
+    return filteredEvents.find((e) => e.seq === selectedSeq) ?? null;
+  }, [filteredEvents, selectedSeq]);
+
+  // Auto-scroll the active row into view while replay is playing. We scope
+  // the lookup to the timeline `<ol>` so we never accidentally grab another
+  // element with the same `data-seq` (e.g. a future minimap).
+  const timelineListRef = useRef<HTMLOListElement | null>(null);
+  useEffect(() => {
+    if (!replay.isPlaying || selectedSeq == null) return;
+    const root = timelineListRef.current;
+    if (!root) return;
+    const row = root.querySelector<HTMLElement>(`[data-seq="${selectedSeq}"]`);
+    // `block: 'nearest'` keeps the row visible without yanking the page when
+    // the user has scrolled the rest of the layout.
+    row?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [replay.isPlaying, selectedSeq]);
+
   // ─── Export signed JSON ───────────────────────────────────────────────────
   const exportLedger = async () => {
     if (!resolvedRunId || !activeRun) return;
@@ -360,6 +397,14 @@ export function InvestigationLedger({
         <ModelCostsCard costs={runDetail.model_costs} />
       )}
 
+      {/* Replay controls — only render once we actually have events to step
+          through. While a run is still tailing live we render the disabled
+          state of the controls (controlled via `enabled: !isLive` above) so
+          the layout doesn't jump when the run finishes. */}
+      {(events?.length ?? 0) > 0 && (
+        <ReplayControls controller={replay} currentEvent={currentReplayEvent} />
+      )}
+
       {/* Two-pane layout: timeline on the left, explain on the right */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         <div className="lg:col-span-5">
@@ -394,7 +439,10 @@ export function InvestigationLedger({
                 />
               </div>
             ) : (
-              <ol className="max-h-[640px] space-y-1 overflow-y-auto p-1">
+              <ol
+                ref={timelineListRef}
+                className="max-h-[640px] space-y-1 overflow-y-auto p-1"
+              >
                 {filteredEvents.map((evt) => (
                   <TimelineRow
                     key={evt.id}
@@ -596,8 +644,10 @@ function TimelineRow({
   selected: boolean;
   onClick: () => void;
 }) {
+  // `data-seq` is consumed by the parent's replay scroll-into-view effect so
+  // we can auto-track the cursor through the list without threading refs.
   return (
-    <li>
+    <li data-seq={event.seq}>
       <button
         onClick={onClick}
         className={clsx(
