@@ -265,6 +265,118 @@ the v7.0 release window and then patched through 7.0.1 → 7.0.3.
 
 ---
 
+## v7.1.0 — Shipped ✅ (2026-05-10) — Cloud Security Coverage Wave
+
+Six new connectors, three documentation backfills, and a new ingest template
+closing the biggest cloud-security gap in the connector catalogue. Every Tier-1
+cloud workload protection platform now has a first-class AiSOC integration,
+AWS gets three native data sources, and Kubernetes audit logs land via a
+dual-mode connector that works on both managed and air-gapped clusters.
+
+### Track A — Documentation backfill for existing cloud connectors
+
+- [x] **`apps/docs/docs/connectors/wiz.md`** — Service-account creation,
+      `read:issues` + `read:vulnerabilities` scopes, token rotation, normalised
+      severity map, worked Wiz `Issue` → inbox event example.
+- [x] **`apps/docs/docs/connectors/aws-security-hub.md`** — IAM-role vs.
+      static-key auth, `securityhub:GetFindings` permission, and the
+      `BLOCK_IP`/`ALLOW_IP` capability documented end-to-end against
+      `services/actions/app/clients/aws_security_groups.py`.
+- [x] **`apps/docs/docs/connectors/lacework.md`** — API-token flow, `api_url`
+      regional variants, alert → event severity collapse.
+- [x] **`apps/docs/sidebars.ts`** — All three backfilled pages + the four new
+      Track B–D pages registered under the `Connectors` category.
+
+### Track B — New CNAPP connectors
+
+- [x] **`PrismaCloudConnector`** (`services/connectors/app/connectors/prisma_cloud.py`)
+      — Full CSPM/CWPP coverage. JWT auth via `POST /login`, paginated
+      `GET /alert/v1/alert` with windowed `time.from`/`time.to`, severity collapse,
+      `compute_url` override for self-hosted Compute Edition.
+- [x] **`OrcaConnector`** (`services/connectors/app/connectors/orca.py`) —
+      `https://api.orcasecurity.io/api/alerts` with `api_token` auth, severity
+      collapse with Orca-specific `hazardous → high` rule.
+- [x] Manifests at `plugins/prisma-cloud/plugin.yaml` and `plugins/orca/plugin.yaml`,
+      docs at `apps/docs/docs/connectors/{prisma-cloud,orca}.md`, full test
+      suites under `services/connectors/tests/test_{prisma_cloud,orca}.py`.
+
+### Track C — Native AWS connectors
+
+- [x] **`AWSGuardDutyConnector`** (`services/connectors/app/connectors/aws_guardduty.py`)
+      — boto3-based, supports IAM-role + static-key auth via `_resolve_session`,
+      iterates detectors with `list_findings` + `get_findings`. Collapses
+      GuardDuty's continuous numeric severity scale (`0.1`–`10.0`) into AiSOC's
+      four-tier `info|low|medium|high` ladder.
+- [x] **`AWSCloudTrailConnector`** (`services/connectors/app/connectors/aws_cloudtrail.py`)
+      — `cloudtrail.lookup_events` with a curated 21-event allow-list covering
+      identity abuse, persistence, data-plane abuse, network exposure, and trail
+      tampering. Allow-list overridable via the `event_names` field.
+- [x] **`AWSVPCFlowLogsConnector`** (`services/connectors/app/connectors/aws_vpc_flow.py`)
+      — `cloudwatch_logs.filter_log_events`, v2 + v5 format parsing,
+      RFC-5735-aware public-IP heuristic, default `?REJECT` filter pattern,
+      severity heuristic (`public REJECT → medium`, `internal REJECT → low`,
+      `ACCEPT → info`).
+- [x] Manifests + docs + tests for all three connectors. 27 unit tests for
+      `AWSVPCFlowLogsConnector` covering v2/v5 parsing and public-IP edge cases.
+
+### Track D — Kubernetes audit logs (dual-mode)
+
+- [x] **`KubernetesAuditConnector`** (`services/connectors/app/connectors/kubernetes_audit.py`)
+      ships with two delivery modes selected via the `mode` config field:
+      - **`webhook` (recommended)** — apiserver pushes audit events to AiSOC's
+        new dedicated `POST /v1/ingest/k8s-audit/{tenant_id}` route,
+        authenticated with a shared secret in the `X-AiSOC-K8s-Token` header
+        (constant-time compared so a partial-prefix attacker can't shave
+        bytes off via timing). Legacy `/v1/inbox/{token}` path with the
+        `k8s-audit` template is kept as a fallback for control planes that
+        cannot inject custom headers into the audit-webhook kubeconfig.
+      - **`file_tail`** — AiSOC's connector pod tails a local `audit.log` using
+        a byte-position cursor (atomically written via `os.replace` to a
+        `.aisoc-cursor` sidecar) with rotation/truncation detection and a hard
+        per-poll byte cap so a backlog can't blow up a single poll cycle.
+- [x] **`services/ingest/internal/handler/k8s_audit.go`** — Dedicated Go
+      handler for the webhook route. Caps body size via
+      `K8S_AUDIT_MAX_BODY_BYTES` (default 16 MiB), rejects oversized batches
+      with `413` so the apiserver shrinks `--audit-webhook-batch-max-size`
+      and retries, and publishes each `EventList.items[]` entry through the
+      existing normalizer + Kafka publisher using
+      `connector_type: kubernetes_audit`. The route is disabled (returns
+      `503`) until an operator sets `K8S_AUDIT_SHARED_SECRET`, so a fresh
+      install never accidentally accepts unauthenticated audit traffic.
+- [x] **`kubernetes_audit` normalizer profile**
+      (`services/ingest/internal/normalizer/normalizer.go`) — Maps `auditID`
+      to `external_id`, `verb` to `activity_name`, `user.username` to
+      `actor.user.name`, `objectRef.{namespace,resource,name}` to a
+      composite `target.resource.name`, and translates the connector's
+      string severity (`critical|high|medium|low|info`) into OCSF integer
+      severities (5/4/3/2/1).
+- [x] **`k8s-audit` inbox template**
+      (`services/ingest/internal/normalizer/templates/k8s-audit.yaml`) —
+      maps apiserver `Event` payloads onto AiSOC's normalised event shape
+      for the legacy inbox-token path; severity is derived in the
+      connector's `_classify_severity` heuristic so the same logic applies
+      to both delivery modes.
+- [x] **Severity heuristic** — `exec`/`attach`/`portforward` on Pod and
+      `create` on `ClusterRoleBinding` → `high`; writes to `Secret`/`ConfigMap`/
+      `ClusterRole`/`Role` → `medium`; successful reads on sensitive resources
+      → `low`; everything else → `info`.
+- [x] **`plugins/kubernetes-audit/plugin.yaml`** — 4-field config schema
+      (`mode`, `cluster_name`, `inbox_token`, `audit_log_path`, `cursor_path`),
+      `category: cloud`, capabilities `pull_audit` + `pull_alerts`.
+- [x] **`apps/docs/docs/connectors/kubernetes-audit.md`** — Sample `AuditPolicy`
+      + sample `AuditSink` for both managed and self-hosted clusters.
+
+### Cross-cutting
+
+- [x] **`pnpm marketplace:sync`** — `marketplace/index.json` +
+      `apps/web/public/marketplace/index.json` rebuilt; plugin count rose
+      `43 → 49`. Total: `total=7104 detections=6993 playbooks=62 plugins=49
+      mitre_techniques=493`.
+- [x] **`apps/web/package.json`** bumped to `7.1.0`; sidebar and landing-page
+      footer surface the new version dynamically.
+
+---
+
 ## v8.0 — Planned
 
 - Mobile responder console (React Native) — triage and acknowledge from phone
