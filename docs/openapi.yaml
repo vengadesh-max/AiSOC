@@ -353,6 +353,83 @@ paths:
                 $ref: '#/components/schemas/AlertStatsResponse'
       security:
       - HTTPBearer: []
+  /api/v1/alerts/queue:
+    get:
+      tags:
+      - alerts
+      summary: Get Alert Queue
+      description: 'Investigation Queue workbench feed.
+
+
+        Returns the prioritised list of alerts the analyst should work on
+
+        next: alerts assigned to them, followed by unassigned
+
+        critical/high alerts, ordered by SLA due time.
+
+
+        The endpoint also returns ``counts`` for both buckets unconditionally
+
+        so the topbar badge and the workbench tabs can render without an
+
+        extra round-trip.'
+      operationId: get_alert_queue_api_v1_alerts_queue_get
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: owner
+        in: query
+        required: false
+        schema:
+          enum:
+          - me
+          - unassigned
+          - all
+          type: string
+          default: all
+          title: Owner
+      - name: period
+        in: query
+        required: false
+        schema:
+          enum:
+          - 24h
+          - 7d
+          - 30d
+          - all
+          type: string
+          default: all
+          title: Period
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          default: 1
+          title: Page
+      - name: page_size
+        in: query
+        required: false
+        schema:
+          type: integer
+          maximum: 200
+          minimum: 1
+          default: 50
+          title: Page Size
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueueResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
   /api/v1/alerts/{alert_id}:
     get:
       tags:
@@ -425,6 +502,43 @@ paths:
       summary: Escalate Alert
       description: Escalate an alert (raises severity by one level).
       operationId: escalate_alert_api_v1_alerts__alert_id__escalate_post
+      security:
+      - HTTPBearer: []
+      parameters:
+      - name: alert_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          title: Alert Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /api/v1/alerts/{alert_id}/claim:
+    post:
+      tags:
+      - alerts
+      summary: Claim Alert Endpoint
+      description: 'Atomically claim an unassigned alert for the current user.
+
+
+        Returns ``409 Conflict`` if the alert is already assigned to someone
+
+        else — the claim is a compare-and-set on ``assigned_to_id``, so two
+
+        analysts racing for the same alert never both win.'
+      operationId: claim_alert_endpoint_api_v1_alerts__alert_id__claim_post
       security:
       - HTTPBearer: []
       parameters:
@@ -19683,6 +19797,224 @@ components:
       - rows
       - total_rows
       title: QueryResult
+    QueueAction:
+      properties:
+        priority:
+          type: integer
+          title: Priority
+        action:
+          type: string
+          title: Action
+        risk:
+          type: string
+          title: Risk
+          default: low
+      type: object
+      required:
+      - priority
+      - action
+      title: QueueAction
+      description: 'Top suggested next action for a queue row.
+
+
+        Sourced from ``Alert.ai_recommendations``. The lowest-priority
+
+        integer wins (1 = most urgent). String-only legacy values are
+
+        accepted and mapped to ``risk="low"`` with the array index as a
+
+        fallback priority.'
+    QueueAsset:
+      properties:
+        kind:
+          type: string
+          title: Kind
+          description: host | user | ip | asset
+        value:
+          type: string
+          title: Value
+        label:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Label
+      type: object
+      required:
+      - kind
+      - value
+      title: QueueAsset
+      description: 'Lightweight asset descriptor for a queue row.
+
+
+        The queue surfaces *one* representative entity per alert so the
+
+        row is informative at a glance ("VPN brute force on `web-01`")
+
+        without enumerating every entity. The full pivotable list lives
+
+        on the Investigation Rail when the analyst opens the alert.'
+    QueueItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        tenant_id:
+          type: string
+          format: uuid
+          title: Tenant Id
+        title:
+          type: string
+          title: Title
+        severity:
+          type: string
+          title: Severity
+        status:
+          type: string
+          title: Status
+        priority:
+          type: integer
+          title: Priority
+        category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Category
+        connector_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connector Type
+        assigned_to_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Assigned To Id
+        case_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Case Id
+        first_seen:
+          type: string
+          format: date-time
+          title: First Seen
+        sla_due_at:
+          type: string
+          format: date-time
+          title: Sla Due At
+        sla_remaining_seconds:
+          type: integer
+          title: Sla Remaining Seconds
+        sla_breached:
+          type: boolean
+          title: Sla Breached
+        age_seconds:
+          type: integer
+          title: Age Seconds
+        asset:
+          anyOf:
+          - $ref: '#/components/schemas/QueueAsset'
+          - type: 'null'
+        suggested_action:
+          anyOf:
+          - $ref: '#/components/schemas/QueueAction'
+          - type: 'null'
+        bucket:
+          type: string
+          enum:
+          - mine
+          - unassigned
+          title: Bucket
+      type: object
+      required:
+      - id
+      - tenant_id
+      - title
+      - severity
+      - status
+      - priority
+      - first_seen
+      - sla_due_at
+      - sla_remaining_seconds
+      - sla_breached
+      - age_seconds
+      - bucket
+      title: QueueItem
+      description: 'One row in the Investigation Queue workbench.
+
+
+        Intentionally slimmer than ``AlertResponse``. The queue exists to
+
+        answer "what should I work on next?" — clicking a row navigates
+
+        to ``/alerts/{id}`` which loads full detail via the existing
+
+        detail endpoint (``GET /alerts/{id}``). Keeping this payload
+
+        small means a busy SOC with thousands of open alerts can refresh
+
+        the queue cheaply (the badge on the topbar polls it).'
+    QueueResponse:
+      properties:
+        items:
+          items:
+            $ref: '#/components/schemas/QueueItem'
+          type: array
+          title: Items
+        total:
+          type: integer
+          title: Total
+        counts:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Counts
+        period:
+          type: string
+          title: Period
+        owner:
+          type: string
+          title: Owner
+        page:
+          type: integer
+          title: Page
+        page_size:
+          type: integer
+          title: Page Size
+        pages:
+          type: integer
+          title: Pages
+        generated_at:
+          type: string
+          format: date-time
+          title: Generated At
+      type: object
+      required:
+      - items
+      - total
+      - counts
+      - period
+      - owner
+      - page
+      - page_size
+      - pages
+      - generated_at
+      title: QueueResponse
+      description: 'Paginated queue response.
+
+
+        ``counts`` always reports both buckets so the workbench can
+
+        render the "mine / unassigned / all" tabs without re-fetching.
+
+        ``generated_at`` is the server-side ``now`` we used to compute
+
+        SLA remaining — the frontend can drift its own clock from this
+
+        so multiple analysts on different boxes see the same countdowns.'
     RatingIn:
       properties:
         score:
