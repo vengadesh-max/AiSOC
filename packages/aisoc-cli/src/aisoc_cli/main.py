@@ -12,6 +12,7 @@ Commands:
   aisoc db upgrade                  Run database migrations against the dev stack
   aisoc mcp serve [--transport]     Launch the MCP server for IDE assistants
   aisoc mcp install --host <h>      Wire AiSOC into Claude / Cursor / Continue
+  aisoc submit <file>               POST an alert/event JSON payload to the ingest API
 """
 from __future__ import annotations
 
@@ -701,6 +702,223 @@ def mcp_install(host: str) -> None:
     result = subprocess.run(argv, cwd=str(repo_root))
     if result.returncode != 0:
         sys.exit(result.returncode)
+
+
+# ── submit command ───────────────────────────────────────────────────────────
+#
+# `aisoc submit <file>` lets the founder-flow demo and any operator land a
+# canned OCSF/Okta-shaped payload on the local dev stack in one command.
+# It POSTs to the Go ingest service's batch endpoint with the same envelope
+# the real connectors use (see services/connectors/app/ingest_client.py):
+#
+#     POST {ingest_url}/v1/ingest/batch
+#     X-Tenant-ID: <uuid>
+#     { connector_id, connector_type, source_format, events: [...] }
+#
+# The fixture format is intentionally forgiving — the file may be:
+#   * { "events": [...], "connector_id": ..., "connector_type": ..., "source_format": ... }
+#   * a bare JSON list of event dicts
+#   * a single event dict (auto-wrapped)
+# Any keys present in a dict-shaped fixture override the matching CLI flags,
+# so a fixture can pin its own connector identity without operator flags.
+
+_DEFAULT_INGEST_URL = "http://127.0.0.1:8081"
+_DEFAULT_TENANT_ID = "00000000-0000-0000-0000-000000000001"
+_DEFAULT_CONNECTOR_ID = "aisoc-cli-submit"
+_DEFAULT_CONNECTOR_TYPE = "okta_system_log"
+_DEFAULT_SOURCE_FORMAT = "json"
+
+
+def _coerce_events(payload: Any) -> tuple[list[dict[str, Any]], dict[str, str]]:
+    """Normalize a parsed JSON payload into (events, fixture_overrides).
+
+    Returns the event list plus any connector_id / connector_type /
+    source_format overrides that a dict-shaped fixture wants to pin.
+    """
+    overrides: dict[str, str] = {}
+    if isinstance(payload, list):
+        events = payload
+    elif isinstance(payload, dict):
+        if "events" in payload and isinstance(payload["events"], list):
+            events = payload["events"]
+            for key in ("connector_id", "connector_type", "source_format"):
+                value = payload.get(key)
+                if isinstance(value, str) and value:
+                    overrides[key] = value
+        else:
+            events = [payload]
+    else:
+        raise click.ClickException(
+            "Payload must be a JSON object, a list of events, "
+            "or an object with an 'events' list."
+        )
+
+    cleaned: list[dict[str, Any]] = []
+    for idx, event in enumerate(events):
+        if not isinstance(event, dict):
+            raise click.ClickException(
+                f"Event at index {idx} is not a JSON object (got {type(event).__name__})."
+            )
+        cleaned.append(event)
+
+    if not cleaned:
+        raise click.ClickException("No events to submit — the payload is empty.")
+
+    return cleaned, overrides
+
+
+@cli.command()
+@click.argument(
+    "file",
+    type=click.Path(exists=True, dir_okay=False, readable=True, path_type=Path),
+)
+@click.option(
+    "--ingest-url",
+    envvar="AISOC_INGEST_URL",
+    default=_DEFAULT_INGEST_URL,
+    show_default=True,
+    help="Base URL for the ingest service (e.g. http://127.0.0.1:8081).",
+)
+@click.option(
+    "--tenant-id",
+    envvar="AISOC_TENANT_ID",
+    default=_DEFAULT_TENANT_ID,
+    show_default=True,
+    help="Tenant UUID sent in the X-Tenant-ID header.",
+)
+@click.option(
+    "--connector-id",
+    default=_DEFAULT_CONNECTOR_ID,
+    show_default=True,
+    help="connector_id field in the ingest envelope.",
+)
+@click.option(
+    "--connector-type",
+    default=_DEFAULT_CONNECTOR_TYPE,
+    show_default=True,
+    help="connector_type field — chooses the normalizer profile (e.g. okta_system_log).",
+)
+@click.option(
+    "--source-format",
+    default=_DEFAULT_SOURCE_FORMAT,
+    show_default=True,
+    help="source_format hint for the normalizer.",
+)
+@click.option(
+    "--timeout",
+    type=float,
+    default=30.0,
+    show_default=True,
+    help="HTTP timeout in seconds.",
+)
+def submit(
+    file: Path,
+    ingest_url: str,
+    tenant_id: str,
+    connector_id: str,
+    connector_type: str,
+    source_format: str,
+    timeout: float,
+) -> None:
+    """Submit a JSON alert/event payload to the local ingest service.
+
+    Reads ``FILE``, normalizes it into the ingest batch envelope, and POSTs to
+    ``{ingest_url}/v1/ingest/batch`` with the tenant header. Used by the
+    quickstart video script to drop a lateral-movement alert into the stack
+    in one command.
+    """
+    try:
+        raw = file.read_text(encoding="utf-8")
+    except OSError as exc:  # pragma: no cover - click handles `exists=True`
+        raise click.ClickException(f"Could not read {file}: {exc}") from exc
+
+    # Strip a leading BOM, which `json.loads` otherwise refuses.
+    if raw.startswith("\ufeff"):
+        raw = raw.lstrip("\ufeff")
+
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError as exc:
+        raise click.ClickException(f"{file} is not valid JSON: {exc}") from exc
+
+    events, overrides = _coerce_events(payload)
+    connector_id = overrides.get("connector_id", connector_id)
+    connector_type = overrides.get("connector_type", connector_type)
+    source_format = overrides.get("source_format", source_format)
+
+    url = f"{ingest_url.rstrip('/')}/v1/ingest/batch"
+    body = {
+        "connector_id": connector_id,
+        "connector_type": connector_type,
+        "source_format": source_format,
+        "events": events,
+    }
+
+    console.print(
+        Panel(
+            f"[bold]file:[/bold] {file}\n"
+            f"[bold]url:[/bold] {url}\n"
+            f"[bold]tenant:[/bold] {tenant_id}\n"
+            f"[bold]connector_id:[/bold] {connector_id}\n"
+            f"[bold]connector_type:[/bold] {connector_type}\n"
+            f"[bold]source_format:[/bold] {source_format}\n"
+            f"[bold]events:[/bold] {len(events)}",
+            title="[bold green]aisoc submit[/bold green]",
+        )
+    )
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-Tenant-ID": tenant_id,
+    }
+
+    try:
+        with httpx.Client(timeout=timeout) as client:
+            resp = client.post(url, headers=headers, json=body)
+    except httpx.HTTPError as exc:
+        console.print(
+            f"[red]Ingest service unreachable at {url}:[/red] {exc}\n"
+            "Is the dev stack running? Try [bold]aisoc serve[/bold] first."
+        )
+        sys.exit(1)
+
+    if resp.status_code >= 400:
+        console.print(
+            f"[red]Ingest service returned {resp.status_code}:[/red] {resp.text[:500]}"
+        )
+        sys.exit(1)
+
+    try:
+        data = resp.json()
+    except ValueError:
+        console.print(
+            f"[red]Ingest service returned non-JSON ({resp.status_code}):[/red] "
+            f"{resp.text[:200]}"
+        )
+        sys.exit(1)
+
+    accepted = data.get("accepted", 0)
+    rejected = data.get("rejected", 0)
+    request_id = data.get("request_id", "-")
+    errors = data.get("errors") or []
+
+    console.print(
+        Panel(
+            f"[bold]status:[/bold] {resp.status_code}\n"
+            f"[bold]accepted:[/bold] {accepted}\n"
+            f"[bold]rejected:[/bold] {rejected}\n"
+            f"[bold]request_id:[/bold] {request_id}",
+            title="[bold green]ingest response[/bold green]",
+        )
+    )
+
+    if errors:
+        console.print("[yellow]errors:[/yellow]")
+        for err in errors:
+            console.print(f"  • {err}")
+
+    if rejected and not accepted:
+        sys.exit(1)
 
 
 if __name__ == "__main__":
