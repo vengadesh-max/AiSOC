@@ -31,18 +31,22 @@ The runner also dumps the synthetic-telemetry coverage summary so connector
 and Sigma-rule PRs can pin against a stable corpus.
 
 Usage:
-    python3 scripts/run_evals.py                  # human-readable + writes report
-    python3 scripts/run_evals.py --json           # JSON to stdout
-    python3 scripts/run_evals.py --out path.json  # write to a custom path
-    python3 scripts/run_evals.py --ci             # exit non-zero on regression
+    python3 scripts/run_evals.py                       # human-readable + writes report
+    python3 scripts/run_evals.py --suite all           # run every suite (default)
+    python3 scripts/run_evals.py --suite mitre_accuracy
+                                                       # run a single suite by name
+    python3 scripts/run_evals.py --json                # JSON to stdout
+    python3 scripts/run_evals.py --out path.json       # write to a custom path
+    python3 scripts/run_evals.py --ci                  # exit non-zero on regression
     python3 scripts/run_evals.py \
         --baseline eval_baseline.json \
-        --max-regression-pp 1.0                   # gate against a saved baseline
+        --max-regression-pp 1.0                        # gate against a saved baseline
 
 Exit codes:
     0  All gates passed (or --ci not set)
     1  At least one suite below its target floor (only with --ci)
     2  MITRE accuracy regressed by ≥ --max-regression-pp vs baseline (w2-dac)
+    3  Eval substrate imports failed (services/agents deps not installed)
 """
 from __future__ import annotations
 
@@ -57,84 +61,111 @@ _REPO_ROOT = Path(__file__).resolve().parent.parent
 _AGENTS_ROOT = _REPO_ROOT / "services" / "agents"
 sys.path.insert(0, str(_AGENTS_ROOT))
 
-from tests.test_adversary_eval import (
-    _HEAVY_BUCKET_CEILING as _ADVERSARY_HEAVY_CEILING,
-)
-from tests.test_adversary_eval import (
-    _LIGHT_BUCKET_FLOOR as _ADVERSARY_LIGHT_FLOOR,
-)
-from tests.test_adversary_eval import (
-    _OVERALL_FLOOR as _ADVERSARY_OVERALL_FLOOR,
-)
-from tests.test_adversary_eval import (  # type: ignore
-    evaluate_adversary_accuracy,
-)
-from tests.test_alert_reduction import (  # type: ignore
-    compute_reduction,
-    fuse_alerts,
-    generate_noisy_alert_stream,
-)
-from tests.test_confidence_calibration import (  # type: ignore
-    BRIER_THRESHOLD_INVESTIGATION as _CALIB_BRIER_INV,
-)
-from tests.test_confidence_calibration import (
-    BRIER_THRESHOLD_TRIAGE as _CALIB_BRIER_TRIAGE,
-)
-from tests.test_confidence_calibration import (
-    ECE_THRESHOLD_INVESTIGATION as _CALIB_ECE_INV,
-)
-from tests.test_confidence_calibration import (
-    ECE_THRESHOLD_TRIAGE as _CALIB_ECE_TRIAGE,
-)
-from tests.test_confidence_calibration import (
-    run_evaluation as _run_calibration_eval,
-)
-from tests.test_detection_fp_rate import (  # type: ignore
-    MAX_PER_RULE_FPR as _DETECTION_FP_CEILING,
-)
-from tests.test_detection_fp_rate import (
-    evaluate_per_rule_fp,
-)
-from tests.test_hunt_corpus import (
-    _NEGATIVE_CEILING as _HUNT_NEGATIVE_CEILING,
-)
-from tests.test_hunt_corpus import (
-    _POSITIVE_FLOOR as _HUNT_POSITIVE_FLOOR,
-)
-from tests.test_hunt_corpus import (  # type: ignore
-    evaluate_hunt_corpus,
-)
-from tests.test_investigation_completeness import (  # type: ignore
-    evaluate_completeness,
-)
-from tests.test_memory_recall import (  # type: ignore
-    RECALL_ACCURACY_FLOOR as _RECALL_FLOOR,
-)
-from tests.test_memory_recall import (
-    run_evaluation as _run_memory_recall_eval,
-)
-from tests.test_mitre_accuracy import evaluate_mitre_accuracy  # type: ignore
-from tests.test_override_accuracy import (  # type: ignore
-    OVERRIDE_ACCURACY_FLOOR as _OVERRIDE_FLOOR,
-)
-from tests.test_override_accuracy import (
-    run_evaluation as _run_override_accuracy_eval,
-)
-from tests.test_playbook_completion_rate import (
-    ACTION_ALIGNMENT_FLOOR as _PLAYBOOK_ALIGN_FLOOR,
-)
-from tests.test_playbook_completion_rate import (
-    HIGH_CRIT_MAPPED_FLOOR as _PLAYBOOK_HIGH_CRIT_FLOOR,
-)
-from tests.test_playbook_completion_rate import (  # type: ignore
-    OVERALL_COMPLETION_FLOOR as _PLAYBOOK_OVERALL_FLOOR,
-)
-from tests.test_playbook_completion_rate import (
-    evaluate_playbook_completion,
-)
-from tests.test_response_quality import (  # type: ignore
-    evaluate_response_quality,
-)
+
+def _print_import_error_hint(exc: BaseException) -> None:
+    """Friendly message when ``services/agents`` deps aren't installed.
+
+    The quickstart video walks new contributors through a fresh clone, so
+    when ``run_evals.py`` fails on import we owe them the exact two-command
+    fix rather than a raw ``ModuleNotFoundError`` traceback.
+    """
+    print(
+        "ERROR: run_evals.py could not import the AiSOC eval substrate.\n"
+        f"       Underlying cause: {exc.__class__.__name__}: {exc}\n"
+        "\n"
+        "       This usually means services/agents Python deps aren't\n"
+        "       installed in your current venv. Install them with:\n"
+        "\n"
+        "           python -m venv .venv && source .venv/bin/activate\n"
+        "           pip install -e services/agents\n"
+        "\n"
+        "       Then re-run `python scripts/run_evals.py --suite all`.",
+        file=sys.stderr,
+    )
+
+
+try:
+    from tests.test_adversary_eval import (
+        _HEAVY_BUCKET_CEILING as _ADVERSARY_HEAVY_CEILING,
+    )
+    from tests.test_adversary_eval import (
+        _LIGHT_BUCKET_FLOOR as _ADVERSARY_LIGHT_FLOOR,
+    )
+    from tests.test_adversary_eval import (
+        _OVERALL_FLOOR as _ADVERSARY_OVERALL_FLOOR,
+    )
+    from tests.test_adversary_eval import (  # type: ignore
+        evaluate_adversary_accuracy,
+    )
+    from tests.test_alert_reduction import (  # type: ignore
+        compute_reduction,
+        fuse_alerts,
+        generate_noisy_alert_stream,
+    )
+    from tests.test_confidence_calibration import (  # type: ignore
+        BRIER_THRESHOLD_INVESTIGATION as _CALIB_BRIER_INV,
+    )
+    from tests.test_confidence_calibration import (
+        BRIER_THRESHOLD_TRIAGE as _CALIB_BRIER_TRIAGE,
+    )
+    from tests.test_confidence_calibration import (
+        ECE_THRESHOLD_INVESTIGATION as _CALIB_ECE_INV,
+    )
+    from tests.test_confidence_calibration import (
+        ECE_THRESHOLD_TRIAGE as _CALIB_ECE_TRIAGE,
+    )
+    from tests.test_confidence_calibration import (
+        run_evaluation as _run_calibration_eval,
+    )
+    from tests.test_detection_fp_rate import (  # type: ignore
+        MAX_PER_RULE_FPR as _DETECTION_FP_CEILING,
+    )
+    from tests.test_detection_fp_rate import (
+        evaluate_per_rule_fp,
+    )
+    from tests.test_hunt_corpus import (
+        _NEGATIVE_CEILING as _HUNT_NEGATIVE_CEILING,
+    )
+    from tests.test_hunt_corpus import (
+        _POSITIVE_FLOOR as _HUNT_POSITIVE_FLOOR,
+    )
+    from tests.test_hunt_corpus import (  # type: ignore
+        evaluate_hunt_corpus,
+    )
+    from tests.test_investigation_completeness import (  # type: ignore
+        evaluate_completeness,
+    )
+    from tests.test_memory_recall import (  # type: ignore
+        RECALL_ACCURACY_FLOOR as _RECALL_FLOOR,
+    )
+    from tests.test_memory_recall import (
+        run_evaluation as _run_memory_recall_eval,
+    )
+    from tests.test_mitre_accuracy import evaluate_mitre_accuracy  # type: ignore
+    from tests.test_override_accuracy import (  # type: ignore
+        OVERRIDE_ACCURACY_FLOOR as _OVERRIDE_FLOOR,
+    )
+    from tests.test_override_accuracy import (
+        run_evaluation as _run_override_accuracy_eval,
+    )
+    from tests.test_playbook_completion_rate import (
+        ACTION_ALIGNMENT_FLOOR as _PLAYBOOK_ALIGN_FLOOR,
+    )
+    from tests.test_playbook_completion_rate import (
+        HIGH_CRIT_MAPPED_FLOOR as _PLAYBOOK_HIGH_CRIT_FLOOR,
+    )
+    from tests.test_playbook_completion_rate import (  # type: ignore
+        OVERALL_COMPLETION_FLOOR as _PLAYBOOK_OVERALL_FLOOR,
+    )
+    from tests.test_playbook_completion_rate import (
+        evaluate_playbook_completion,
+    )
+    from tests.test_response_quality import (  # type: ignore
+        evaluate_response_quality,
+    )
+except ImportError as _import_exc:  # pragma: no cover - exercised in CLI tests
+    _print_import_error_hint(_import_exc)
+    sys.exit(3)
 
 # Per-suite floors (must match what tests assert)
 _TARGETS = {
@@ -638,8 +669,36 @@ def _summarise_telemetry() -> dict:
     }
 
 
+# Ordered suite registry — keeps CLI --suite choices, the report layout,
+# and the human-readable summary in lockstep.
+_SUITE_RUNNERS: dict[str, callable] = {
+    "mitre_accuracy": _run_mitre,
+    "alert_reduction": _run_alert_reduction,
+    "investigation_completeness": _run_completeness,
+    "response_quality": _run_response_quality,
+    "hunt_corpus": _run_hunt_corpus,
+    "adversary_eval": _run_adversary,
+    "confidence_calibration": _run_confidence_calibration,
+    "memory_recall": _run_memory_recall,
+    "override_accuracy": _run_override_accuracy,
+    "playbook_completion_rate": _run_playbook_completion,
+    "detection_fp_rate": _run_detection_fp_rate,
+}
+_SUITE_NAMES = tuple(_SUITE_RUNNERS.keys())
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="AiSOC Pillar-1 unified evaluation runner.")
+    parser.add_argument(
+        "--suite",
+        choices=("all", *_SUITE_NAMES),
+        default="all",
+        help=(
+            "Which eval suite to run. 'all' (default) executes every suite; "
+            "pass a single suite name to run it in isolation. This is the "
+            "flag the AiSOC demo video uses (`--suite all`)."
+        ),
+    )
     parser.add_argument("--json", action="store_true", help="Print JSON report to stdout.")
     parser.add_argument(
         "--out",
@@ -670,22 +729,14 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    selected = _SUITE_NAMES if args.suite == "all" else (args.suite,)
+    suites = {name: _SUITE_RUNNERS[name]() for name in selected}
+
     summary: dict = {
         "generated_at": datetime.now(UTC).isoformat(),
         "dataset": "synthetic_incidents.json (200 cases, deterministic)",
-        "suites": {
-            "mitre_accuracy": _run_mitre(),
-            "alert_reduction": _run_alert_reduction(),
-            "investigation_completeness": _run_completeness(),
-            "response_quality": _run_response_quality(),
-            "hunt_corpus": _run_hunt_corpus(),
-            "adversary_eval": _run_adversary(),
-            "confidence_calibration": _run_confidence_calibration(),
-            "memory_recall": _run_memory_recall(),
-            "override_accuracy": _run_override_accuracy(),
-            "playbook_completion_rate": _run_playbook_completion(),
-            "detection_fp_rate": _run_detection_fp_rate(),
-        },
+        "suite_filter": args.suite,
+        "suites": suites,
         "telemetry": _summarise_telemetry(),
     }
     summary["all_passed"] = all(s["passed"] for s in summary["suites"].values())
@@ -775,7 +826,18 @@ def main() -> None:
         else:
             print("  Synthetic telemetry: <not generated>")
         print("=" * 78)
-        verdict = "ALL GATES PASSED" if summary["all_passed"] else "REGRESSION DETECTED"
+        if summary["all_passed"]:
+            verdict = (
+                "PASS — ALL GATES GREEN"
+                if args.suite == "all"
+                else f"PASS — {args.suite} green"
+            )
+        else:
+            verdict = (
+                "FAIL — REGRESSION DETECTED"
+                if args.suite == "all"
+                else f"FAIL — {args.suite} regressed"
+            )
         print(f"  {verdict}")
         cmp = summary.get("baseline_compare")
         if cmp and cmp.get("available"):
