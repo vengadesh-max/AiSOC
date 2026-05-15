@@ -4,10 +4,18 @@
 // shared `animate-meteor` keyframe in `globals.css`; the JS layer only
 // computes initial start positions and a per-meteor delay. Hidden under
 // `prefers-reduced-motion`.
+//
+// Random positions are generated in `useEffect` rather than during render
+// because this is a Client Component that still SSRs in the Next.js App
+// Router. Running `Math.random()` during render would produce different
+// values on the server and on hydration, triggering a hydration mismatch
+// warning. Deferring to `useEffect` means SSR ships zero meteors and the
+// client populates them after mount — imperceptible for a purely decorative
+// background.
 'use client';
 
 import { useReducedMotion } from 'framer-motion';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 interface MeteorsProps {
@@ -16,10 +24,20 @@ interface MeteorsProps {
   className?: string;
 }
 
+interface Meteor {
+  id: number;
+  top: string;
+  left: string;
+  delay: string;
+  duration: string;
+}
+
 export function Meteors({ number = 18, className }: MeteorsProps) {
   const prefersReducedMotion = useReducedMotion();
-  const meteors = useMemo(
-    () =>
+  const [meteors, setMeteors] = useState<Meteor[]>([]);
+
+  useEffect(() => {
+    setMeteors(
       Array.from({ length: number }, (_, idx) => ({
         id: idx,
         top: `${Math.floor(Math.random() * 100)}%`,
@@ -27,8 +45,8 @@ export function Meteors({ number = 18, className }: MeteorsProps) {
         delay: `${Math.random() * 4}s`,
         duration: `${4 + Math.random() * 6}s`,
       })),
-    [number],
-  );
+    );
+  }, [number]);
 
   if (prefersReducedMotion) return null;
 
