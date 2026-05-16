@@ -22,17 +22,20 @@ export function Logo({ size = 36, withWordmark = false, className }: LogoProps) 
         className="shrink-0"
       >
         <defs>
+          {/* VelvetEdge mark — emerald hex outline (#064E3B → mint #34D399) */}
           <linearGradient id="aisocLogoOutline" x1="32" y1="8" x2="32" y2="56" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#60a5fa" />
-            <stop offset="100%" stopColor="#2563eb" />
+            <stop offset="0%" stopColor="#34D399" />
+            <stop offset="100%" stopColor="#064E3B" />
           </linearGradient>
+          {/* Glyph body keeps the lavender-tinted "no pure white" rule */}
           <linearGradient id="aisocLogoBody" x1="32" y1="14" x2="32" y2="52" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="100%" stopColor="#cbd5f5" />
+            <stop offset="0%" stopColor="#F0EDF5" />
+            <stop offset="100%" stopColor="#C8C2D6" />
           </linearGradient>
+          {/* Spark stays warm — used as the warning/expiring tone elsewhere */}
           <radialGradient id="aisocLogoSpark" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#fde68a" />
-            <stop offset="100%" stopColor="#f59e0b" />
+            <stop offset="0%" stopColor="#FDE68A" />
+            <stop offset="100%" stopColor="#FBBF24" />
           </radialGradient>
         </defs>
         <path
@@ -44,7 +47,7 @@ export function Logo({ size = 36, withWordmark = false, className }: LogoProps) 
         />
         <path
           d="M32 12 L48 21 L48 39 L32 50 L16 39 L16 21 Z"
-          fill="rgba(59,130,246,0.08)"
+          fill="rgba(52,211,153,0.08)"
           stroke="url(#aisocLogoOutline)"
           strokeWidth="1.2"
           strokeLinejoin="round"
@@ -63,8 +66,10 @@ export function Logo({ size = 36, withWordmark = false, className }: LogoProps) 
       </svg>
       {withWordmark && (
         <span className="flex items-baseline gap-2 leading-none">
-          <span className="text-xl font-bold tracking-tight text-white">AiSOC</span>
-          <span className="text-xs font-medium text-gray-500">open-source</span>
+          <span className="font-velvet-display text-xl font-normal tracking-tight text-velvet-content-primary">
+            AiSOC
+          </span>
+          <span className="text-xs font-medium text-velvet-content-tertiary">open-source</span>
         </span>
       )}
     </span>

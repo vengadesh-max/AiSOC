@@ -26,9 +26,9 @@ export function OpenSource() {
   return (
     <section id="open-source" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
-        <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-surface-card p-8 md:p-12">
+        <div className="relative overflow-hidden rounded-3xl border border-velvet-content-primary/10 bg-velvet-surface-raised p-8 md:p-12">
           {/* Soft glow */}
-          <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-brand-500/10 blur-3xl" />
+          <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-velvet-emerald/10 blur-3xl" />
           <div className="pointer-events-none absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
 
           <div className="relative grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start">
@@ -38,10 +38,10 @@ export function OpenSource() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.5 }}
             >
-              <span className="text-xs font-semibold uppercase tracking-wider text-brand-300">
+              <span className="text-xs font-semibold uppercase tracking-wider text-velvet-emerald-mint">
                 Open source · MIT
               </span>
-              <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-5xl">
+              <h2 className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary md:text-5xl">
                 Built in the open.
               </h2>
               <p className="mt-5 max-w-xl text-lg leading-relaxed text-gray-400">
@@ -66,7 +66,7 @@ export function OpenSource() {
                   href="https://github.com/beenuar/AiSOC#quickstart"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-white/30 hover:bg-white/[0.08]"
+                  className="inline-flex items-center gap-2 rounded-lg border border-velvet-content-primary/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-velvet-content-primary/30 hover:bg-white/[0.08]"
                 >
                   Quickstart
                   <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
@@ -75,7 +75,7 @@ export function OpenSource() {
                 </a>
                 <Link
                   href="/why-open-source"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-white/30 hover:bg-white/[0.08]"
+                  className="inline-flex items-center gap-2 rounded-lg border border-velvet-content-primary/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-velvet-content-primary/30 hover:bg-white/[0.08]"
                 >
                   Why open source
                   <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
@@ -85,8 +85,8 @@ export function OpenSource() {
               </div>
 
               {/* Quickstart code */}
-              <div className="mt-8 overflow-hidden rounded-xl border border-white/10 bg-black/40 font-mono text-xs">
-                <div className="flex items-center gap-2 border-b border-white/5 px-4 py-2 text-[10px] uppercase tracking-wider text-gray-500">
+              <div className="mt-8 overflow-hidden rounded-xl border border-velvet-content-primary/10 bg-black/40 font-mono text-xs">
+                <div className="flex items-center gap-2 border-b border-velvet-content-primary/5 px-4 py-2 text-[10px] uppercase tracking-wider text-gray-500">
                   <span className="h-2 w-2 rounded-full bg-rose-400/70" />
                   <span className="h-2 w-2 rounded-full bg-amber-400/70" />
                   <span className="h-2 w-2 rounded-full bg-emerald-400/70" />
@@ -99,7 +99,7 @@ export function OpenSource() {
                   <span className="text-emerald-300">cd</span> aisoc && <span className="text-emerald-300">make</span> up{'\n'}
                   <span className="text-gray-500">$ </span>
                   <span className="text-emerald-300">pnpm</span> seed:demo{'\n'}
-                  <span className="text-brand-300">›</span> Console ready at{' '}
+                  <span className="text-velvet-emerald-mint">›</span> Console ready at{' '}
                   <span className="underline">http://localhost:3000</span>
                 </pre>
               </div>
@@ -115,10 +115,10 @@ export function OpenSource() {
               {PILLARS.map((p) => (
                 <div
                   key={p.title}
-                  className="rounded-xl border border-white/5 bg-white/[0.02] p-5 backdrop-blur"
+                  className="rounded-xl border border-velvet-content-primary/5 bg-white/[0.02] p-5 backdrop-blur"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-brand-500/20 text-brand-200">
+                    <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-velvet-emerald/20 text-velvet-emerald-mint">
                       <svg
                         viewBox="0 0 20 20"
                         className="h-3.5 w-3.5"
@@ -128,7 +128,7 @@ export function OpenSource() {
                         <path d="M7.629 14.571l-3.2-3.2a1 1 0 111.414-1.414l2.493 2.493 6.493-6.493a1 1 0 011.414 1.414l-7.2 7.2a1 1 0 01-1.414 0z" />
                       </svg>
                     </span>
-                    <h3 className="text-sm font-semibold text-white">{p.title}</h3>
+                    <h3 className="font-velvet-display font-normal text-sm text-velvet-content-primary">{p.title}</h3>
                   </div>
                   <p className="mt-2 text-sm leading-relaxed text-gray-400">{p.body}</p>
                 </div>

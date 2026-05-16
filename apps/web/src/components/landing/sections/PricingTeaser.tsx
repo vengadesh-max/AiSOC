@@ -93,33 +93,33 @@ function TierCard({
         delay: index * 0.08,
       }}
       className={cn(
-        'relative flex flex-col gap-6 rounded-2xl border border-surface-border bg-surface-card/70 p-6 backdrop-blur-sm sm:p-8',
+        'relative flex flex-col gap-6 rounded-md border border-velvet-border bg-velvet-surface-raised p-6 backdrop-blur-sm sm:p-8',
         tier.recommended &&
-          'shadow-[0_24px_64px_-24px_rgba(59,130,246,0.45)]',
+          'border-velvet-emerald/60 sm:p-8 motion-safe:shadow-glow-emerald-md',
       )}
     >
       {tier.recommended && <ShineBorder duration={14} borderWidth={1} />}
       <div className="relative">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-lg font-semibold text-fg-primary">{tier.name}</h3>
+          <h3 className="font-velvet-display font-normal text-lg text-velvet-content-primary">{tier.name}</h3>
           {tier.recommended && (
-            <span className="inline-flex items-center rounded-full bg-brand-500/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-300 ring-1 ring-inset ring-brand-500/40">
+            <span className="inline-flex items-center rounded-full bg-velvet-emerald/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-velvet-emerald-mint ring-1 ring-inset ring-velvet-emerald/40">
               Most asked for
             </span>
           )}
         </div>
-        <p className="mt-3 text-3xl font-bold tracking-tight text-fg-primary">
+        <p className="mt-3 font-velvet-display text-3xl font-normal tracking-tight text-velvet-content-primary">
           {tier.price}
         </p>
-        <p className="mt-2 text-sm leading-relaxed text-fg-secondary">
+        <p className="mt-2 text-sm leading-relaxed text-velvet-content-secondary">
           {tier.tagline}
         </p>
       </div>
-      <ul className="relative space-y-2 text-sm text-fg-secondary">
+      <ul className="relative space-y-2 text-sm text-velvet-content-secondary">
         {tier.includes.map((line) => (
           <li key={line} className="flex items-start gap-2">
             <Check
-              className="mt-0.5 h-4 w-4 flex-none text-brand-300"
+              className="mt-0.5 h-4 w-4 flex-none text-velvet-emerald-mint"
               aria-hidden="true"
             />
             <span>{line}</span>
@@ -131,10 +131,10 @@ function TierCard({
         rel={tier.cta.href.startsWith('http') ? 'noreferrer' : undefined}
         target={tier.cta.href.startsWith('http') ? '_blank' : undefined}
         className={cn(
-          'group relative mt-auto inline-flex h-10 items-center justify-center gap-1 rounded-md px-4 text-sm font-semibold transition-shadow duration-200 ease-landing-out-quart focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base',
+          'group relative mt-auto inline-flex h-10 items-center justify-center gap-1 rounded-md px-4 text-sm font-semibold transition-[filter,box-shadow,background-color] duration-200 ease-landing-out-quart focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base',
           tier.recommended
-            ? 'bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] hover:shadow-[0_12px_32px_-12px_rgba(59,130,246,0.65)]'
-            : 'border border-surface-border bg-surface-raised/60 text-fg-primary hover:border-brand-500/40',
+            ? 'bg-velvet-emerald-cta text-velvet-content-primary shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] hover:brightness-110 motion-safe:hover:shadow-glow-emerald-sm'
+            : 'border border-velvet-sapphire bg-transparent text-velvet-sapphire-soft hover:bg-velvet-sapphire/[0.12] motion-safe:hover:shadow-glow-sapphire-sm',
         )}
       >
         {tier.cta.label}
@@ -158,12 +158,12 @@ export function PricingTeaser() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             Pricing
           </p>
           <h2
             id="pricing-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             Free to self-host. Pay only when we host.
           </h2>
@@ -180,10 +180,10 @@ export function PricingTeaser() {
           ))}
         </ul>
 
-        <p className="mt-10 text-center text-sm text-fg-muted">
+        <p className="mt-10 text-center text-sm text-velvet-content-tertiary">
           <Link
             href="/pricing"
-            className="inline-flex items-center gap-1 text-brand-300 transition-colors duration-200 hover:text-brand-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="inline-flex items-center gap-1 text-velvet-emerald-mint transition-colors duration-200 hover:text-velvet-emerald-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             See full pricing
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

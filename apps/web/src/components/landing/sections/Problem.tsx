@@ -57,16 +57,16 @@ export function Problem() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             Why we built this
           </p>
           <h2
             id="problem-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             Your SOC is drowning in alerts.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-fg-secondary sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-velvet-content-secondary sm:text-lg">
             Three problems compound every shift. AiSOC was built to dissolve
             them, not paper over them.
           </p>
@@ -86,18 +86,18 @@ export function Problem() {
                   ease: [0.16, 1, 0.3, 1],
                   delay: index * 0.08,
                 }}
-                className="flex flex-col gap-4 rounded-2xl border border-surface-border bg-surface-card/60 p-6 backdrop-blur-sm transition-shadow duration-300 ease-landing-out-quart hover:shadow-[0_18px_48px_-24px_rgba(59,130,246,0.4)]"
+                className="flex flex-col gap-4 rounded-2xl border border-velvet-border bg-velvet-surface-raised/60 p-6 backdrop-blur-sm transition-shadow duration-300 ease-landing-out-quart hover:motion-safe:shadow-glow-emerald-md"
               >
                 <span
                   aria-hidden="true"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500/20 to-brand-700/20 text-brand-300 ring-1 ring-inset ring-brand-500/30"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-velvet-emerald/20 to-velvet-emerald-light/20 text-velvet-emerald-mint ring-1 ring-inset ring-velvet-emerald/30"
                 >
                   <Icon className="h-5 w-5" />
                 </span>
-                <h3 className="text-base font-semibold leading-snug text-fg-primary sm:text-lg">
+                <h3 className="font-velvet-display font-normal text-base leading-snug text-velvet-content-primary sm:text-lg">
                   {pain.headline}
                 </h3>
-                <p className="text-sm leading-relaxed text-fg-secondary">
+                <p className="text-sm leading-relaxed text-velvet-content-secondary">
                   {pain.body}
                 </p>
               </motion.li>

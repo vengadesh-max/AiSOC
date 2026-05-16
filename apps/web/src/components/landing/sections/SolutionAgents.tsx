@@ -52,7 +52,7 @@ const AGENTS: ReadonlyArray<Agent> = [
     capabilities: 'fusion · entity-risk (RBA) · native detections',
     runsOn: 'Deterministic · no LLM required',
     icon: ScanSearch,
-    accent: 'from-brand-400/20 to-brand-700/20 ring-brand-400/30 text-brand-200',
+    accent: 'from-velvet-emerald/20 to-velvet-emerald-light/20 ring-velvet-emerald-mint/30 text-velvet-emerald-mint',
   },
   {
     id: 'triage',
@@ -63,7 +63,7 @@ const AGENTS: ReadonlyArray<Agent> = [
     runsOn: 'OpenAI · Anthropic · Azure · Bedrock · Ollama · BYO endpoint',
     icon: Sparkles,
     accent:
-      'from-landing-accent-violet/20 to-brand-500/20 ring-landing-accent-violet/30 text-landing-accent-violet',
+      'from-velvet-sapphire/20 to-velvet-emerald-light/20 ring-velvet-sapphire/30 text-velvet-sapphire-soft',
   },
   {
     id: 'hunt',
@@ -73,7 +73,7 @@ const AGENTS: ReadonlyArray<Agent> = [
     runsOn: 'Cloud LLM or local model',
     icon: Telescope,
     accent:
-      'from-brand-500/20 to-brand-300/20 ring-brand-300/30 text-brand-300',
+      'from-velvet-emerald/20 to-velvet-emerald-light/20 ring-velvet-emerald-mint/30 text-velvet-emerald-mint',
   },
   {
     id: 'respond',
@@ -83,7 +83,7 @@ const AGENTS: ReadonlyArray<Agent> = [
     runsOn: 'L0–L4 maturity dial, dry-run by default',
     icon: ShieldCheck,
     accent:
-      'from-landing-accent-ember/20 to-brand-500/20 ring-landing-accent-ember/30 text-landing-accent-ember',
+      'from-velvet-warning/20 to-velvet-emerald-light/20 ring-velvet-warning/30 text-velvet-warning',
   },
 ];
 
@@ -109,9 +109,9 @@ function AgentCard({
         delay: index * 0.08,
       }}
       className={cn(
-        'group relative flex h-full flex-col gap-3 rounded-2xl border border-surface-border bg-surface-card/70 p-5 backdrop-blur-sm',
-        'transition-transform duration-300 ease-landing-out-quart hover:-translate-y-1 hover:border-brand-500/40',
-        'focus-within:-translate-y-1 focus-within:border-brand-500/40',
+        'group relative flex h-full flex-col gap-3 rounded-2xl border border-velvet-border bg-velvet-surface-raised/70 p-5 backdrop-blur-sm',
+        'transition-transform duration-300 ease-landing-out-quart hover:-translate-y-1 hover:border-velvet-emerald/40',
+        'focus-within:-translate-y-1 focus-within:border-velvet-emerald/40',
       )}
     >
       <div className="flex items-center gap-3">
@@ -124,33 +124,33 @@ function AgentCard({
         >
           <Icon className="h-4 w-4" />
         </span>
-        <h3 className="text-base font-semibold tracking-tight text-fg-primary">
+        <h3 className="font-velvet-display font-normal text-base tracking-tight text-velvet-content-primary">
           {agent.label}
         </h3>
         <span
           aria-hidden="true"
-          className="ml-auto inline-flex items-center justify-center rounded-md border border-surface-border bg-surface-raised/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-fg-subtle"
+          className="ml-auto inline-flex items-center justify-center rounded-md border border-velvet-border bg-velvet-surface-raised/60 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.12em] text-velvet-content-tertiary"
         >
           0{index + 1}
         </span>
       </div>
-      <p className="text-sm font-medium leading-snug text-fg-primary">
+      <p className="text-sm font-medium leading-snug text-velvet-content-primary">
         {agent.job}
       </p>
       <dl className="mt-auto space-y-2 text-xs">
         <div>
-          <dt className="font-semibold uppercase tracking-[0.12em] text-fg-subtle">
+          <dt className="font-semibold uppercase tracking-[0.12em] text-velvet-content-tertiary">
             Capabilities
           </dt>
-          <dd className="mt-1 leading-relaxed text-fg-secondary">
+          <dd className="mt-1 leading-relaxed text-velvet-content-secondary">
             {agent.capabilities}
           </dd>
         </div>
         <div>
-          <dt className="font-semibold uppercase tracking-[0.12em] text-fg-subtle">
+          <dt className="font-semibold uppercase tracking-[0.12em] text-velvet-content-tertiary">
             Runs on
           </dt>
-          <dd className="mt-1 leading-relaxed text-fg-muted">{agent.runsOn}</dd>
+          <dd className="mt-1 leading-relaxed text-velvet-content-tertiary">{agent.runsOn}</dd>
         </div>
       </dl>
     </motion.div>
@@ -184,16 +184,16 @@ export function SolutionAgents() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             Four agents, one workflow
           </p>
           <h2
             id="solution-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             One agent for each stage of an incident.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-fg-secondary sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-velvet-content-secondary sm:text-lg">
             AiSOC ships exactly four named agents — Detect, Triage, Hunt, and
             Respond. Each one has a fixed job, a published capability list,
             and a replayable audit trail. Sub-agents (phishing, identity,
@@ -231,8 +231,10 @@ export function SolutionAgents() {
                 duration={3}
                 delay={0.7}
                 curvature={0}
-                gradientStart="#8b5cf6"
-                gradientStop="#3b82f6"
+                // VelvetEdge funnel: triage → hunt is a sapphire → mint
+                // beam (informational handoff).
+                gradientStart="#1E3A8A"
+                gradientStop="#34D399"
               />
               <AnimatedBeam
                 containerRef={containerRef}
@@ -241,8 +243,11 @@ export function SolutionAgents() {
                 duration={3}
                 delay={1.4}
                 curvature={0}
-                gradientStart="#3b82f6"
-                gradientStop="#f97316"
+                // hunt → respond escalates to ruby (urgent action) so the
+                // colour signals the L2/L3 hand-off without breaking the
+                // two-jewel-tone-per-beam rule.
+                gradientStart="#34D399"
+                gradientStop="#9F1239"
               />
             </>
           )}

@@ -67,8 +67,12 @@ export function AnimatedGridPattern({
   return (
     <svg
       aria-hidden="true"
+      // VelvetEdge retheme — emerald-mint grid lines at low alpha so the
+      // pattern hints at the jewel surface without ever cresting body-text
+      // contrast. Reduced-motion users still see the static grid; only
+      // the per-square fade animation is suppressed.
       className={cn(
-        'pointer-events-none absolute inset-0 h-full w-full text-brand-500/15 [mask-image:radial-gradient(circle_at_center,white,transparent_70%)]',
+        'pointer-events-none absolute inset-0 h-full w-full text-velvet-emerald-mint/12 [mask-image:radial-gradient(circle_at_center,white,transparent_70%)]',
         className,
       )}
     >

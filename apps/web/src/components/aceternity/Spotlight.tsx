@@ -9,7 +9,11 @@ import { cn } from '@/lib/utils';
 
 interface SpotlightProps {
   className?: string;
-  /** CSS color string for the spotlight fill. Defaults to brand-500 with alpha. */
+  /**
+   * CSS color string for the spotlight fill. VelvetEdge default is
+   * mint (`#34D399` at low alpha) so the corner glow harmonises with
+   * the emerald page surface.
+   */
   fill?: string;
   /** Use `style` to override the `top` / `left` positioning of the glow. */
   style?: CSSProperties;
@@ -21,7 +25,7 @@ interface SpotlightProps {
  * costs nothing on hydration and degrades to "nothing visible" if CSS
  * filters are blocked.
  */
-export function Spotlight({ className, fill = 'rgb(59 130 246 / 0.55)', style }: SpotlightProps) {
+export function Spotlight({ className, fill = 'rgba(52, 211, 153, 0.45)', style }: SpotlightProps) {
   return (
     <svg
       className={cn('pointer-events-none absolute z-0 h-[169%] w-[138%] opacity-0 animate-fade-in-up lg:w-[84%]', className)}

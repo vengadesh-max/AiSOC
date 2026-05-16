@@ -27,8 +27,11 @@ export function BorderBeam({
   className,
   size = 200,
   duration = 12,
-  colorFrom = '#3b82f6',
-  colorTo = '#8b5cf6',
+  // VelvetEdge defaults — emerald-mint head fading into sapphire tail.
+  // Callers can still pass any hex (e.g. ruby for destructive surfaces)
+  // since the colors flow through CSS custom properties.
+  colorFrom = '#34D399',
+  colorTo = '#1E3A8A',
   delay = 0,
 }: BorderBeamProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -37,7 +40,7 @@ export function BorderBeam({
       <span
         aria-hidden="true"
         className={cn(
-          'pointer-events-none absolute inset-0 rounded-[inherit] border border-brand-500/30',
+          'pointer-events-none absolute inset-0 rounded-[inherit] border border-velvet-emerald-mint/30',
           className,
         )}
       />

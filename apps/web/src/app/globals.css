@@ -340,3 +340,63 @@ code {
 .marquee-pausable:focus-within [class*="animate-marquee"] {
   animation-play-state: paused;
 }
+
+/* ─────────────────────── VelvetEdge (T7.1) ──────────────────────────
+ *
+ * Jewel-tone retheme scoped to the marketing landing routes via the
+ * `.velvet-root` boundary. We do NOT redefine `--surface-base` /
+ * `--fg-primary` here — landing components are migrated to consume the
+ * new `velvet-*` Tailwind utilities (e.g. `bg-velvet-surface-base`,
+ * `text-velvet-content-primary`) so the console chrome keeps its
+ * existing palette unchanged.
+ *
+ * The block below (a) provides a small set of velvet-scoped CSS tokens
+ * the magicui primitives can reach for via `var()` and (b) implements
+ * the spec §Rules #8 reduced-motion fallback: any element marked with
+ * `.velvet-glow` drops its box-shadow when the user has reduced-motion
+ * enabled. Combine with Tailwind utilities like `motion-safe:shadow-glow-emerald-md`
+ * for the same effect at the utility layer.
+ */
+
+.velvet-root {
+  --velvet-surface-base: #0f0f14;
+  --velvet-surface-raised: #181820;
+  --velvet-surface-sunken: #0a0a0e;
+  --velvet-surface-overlay: #22222e;
+  --velvet-content-primary: #f0edf5;
+  --velvet-content-secondary: #c8c2d6;
+  --velvet-content-tertiary: #8e879e;
+  --velvet-emerald: #064e3b;
+  --velvet-emerald-light: #065f46;
+  --velvet-emerald-mint: #34d399;
+  --velvet-ruby: #9f1239;
+  --velvet-ruby-light: #be123c;
+  --velvet-ruby-soft: #fb7185;
+  --velvet-sapphire: #1e3a8a;
+  --velvet-sapphire-soft: #60a5fa;
+  --velvet-sapphire-softer: #93c5fd;
+  --velvet-border: rgba(176, 171, 186, 0.12);
+  --velvet-border-strong: rgba(176, 171, 186, 0.28);
+}
+
+/* Tinted text-selection on landing surfaces so the cursor caret picks up
+   the emerald accent rather than the console's blue. */
+.velvet-root ::selection {
+  background: rgba(52, 211, 153, 0.32);
+  color: #f0edf5;
+}
+
+/* Reduced-motion fallback for jewel-tone glows. The static border + base
+   color alone must remain readable per spec §Rules #8. */
+@media (prefers-reduced-motion: reduce) {
+  .velvet-root .shadow-glow-emerald-sm,
+  .velvet-root .shadow-glow-emerald-md,
+  .velvet-root .shadow-glow-emerald-lg,
+  .velvet-root .shadow-glow-ruby-sm,
+  .velvet-root .shadow-glow-ruby-md,
+  .velvet-root .shadow-glow-sapphire-sm,
+  .velvet-root .shadow-glow-sapphire-md,
+  .velvet-root .velvet-glow {
+    box-shadow: none !important;
+  }
+}

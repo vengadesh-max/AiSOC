@@ -54,7 +54,7 @@ export function StickyNav() {
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-200 ease-landing-out-quart',
         scrolled
-          ? 'border-b border-surface-border bg-surface-base/85 backdrop-blur-md'
+          ? 'border-b border-velvet-border bg-velvet-surface-base/85 backdrop-blur-md'
           : 'border-b border-transparent bg-transparent',
       )}
     >
@@ -65,15 +65,15 @@ export function StickyNav() {
         <Link
           href="/"
           aria-label="AiSOC home"
-          className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+          className="flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
         >
           <span
             aria-hidden="true"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-brand-400 to-brand-700 text-xs font-bold text-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-velvet-emerald-cta text-xs font-bold text-velvet-content-primary shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)] motion-safe:shadow-glow-emerald-sm"
           >
             Ai
           </span>
-          <span className="text-base font-semibold tracking-tight text-fg-primary">
+          <span className="font-velvet-display text-base font-normal tracking-tight text-velvet-content-primary">
             AiSOC
           </span>
         </Link>
@@ -83,7 +83,7 @@ export function StickyNav() {
             <li key={link.href}>
               <Link
                 href={link.href}
-                className="rounded-md px-3 py-2 text-sm font-medium text-fg-secondary transition-colors duration-150 ease-landing-out-quart hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+                className="rounded-md px-3 py-2 text-sm font-medium text-velvet-content-secondary transition-colors duration-150 ease-landing-out-quart hover:text-velvet-content-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
               >
                 {link.label}
               </Link>
@@ -97,20 +97,20 @@ export function StickyNav() {
             target="_blank"
             rel="noreferrer"
             aria-label="Star AiSOC on GitHub"
-            className="inline-flex items-center gap-2 rounded-md border border-surface-border bg-surface-raised/60 px-3 py-1.5 text-sm font-medium text-fg-secondary transition-colors duration-150 ease-landing-out-quart hover:border-brand-500/40 hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="inline-flex items-center gap-2 rounded-md border border-velvet-border bg-velvet-surface-raised/60 px-3 py-1.5 text-sm font-medium text-velvet-content-secondary transition-colors duration-150 ease-landing-out-quart hover:border-velvet-emerald/40 hover:text-velvet-content-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             <GithubMark className="h-3.5 w-3.5" />
             <span aria-hidden="true">Star on GitHub</span>
           </a>
           <Link
             href="#pricing"
-            className="rounded-md px-3 py-1.5 text-sm font-medium text-fg-secondary transition-colors duration-150 ease-landing-out-quart hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="rounded-md px-3 py-1.5 text-sm font-medium text-velvet-content-secondary transition-colors duration-150 ease-landing-out-quart hover:text-velvet-content-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             Self-host
           </Link>
           <Link
             href="https://app.aisoc.dev/signup"
-            className="group inline-flex items-center gap-1 rounded-md bg-gradient-to-br from-brand-500 to-brand-700 px-4 py-1.5 text-sm font-semibold text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart hover:shadow-[0_8px_24px_-8px_rgba(59,130,246,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="group inline-flex items-center gap-1 rounded-md bg-velvet-emerald-cta px-4 py-1.5 text-sm font-semibold text-velvet-content-primary shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-[filter,box-shadow] duration-200 ease-landing-out-quart hover:brightness-110 motion-safe:hover:shadow-glow-emerald-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             Start free
             <ArrowRight
@@ -126,7 +126,7 @@ export function StickyNav() {
           aria-expanded={open}
           aria-controls="aisoc-mobile-nav"
           aria-label={open ? 'Close menu' : 'Open menu'}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-surface-border bg-surface-raised/60 text-fg-secondary transition-colors duration-150 ease-landing-out-quart hover:border-brand-500/40 hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base lg:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-velvet-border bg-velvet-surface-raised/60 text-velvet-content-secondary transition-colors duration-150 ease-landing-out-quart hover:border-velvet-emerald/40 hover:text-velvet-content-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base lg:hidden"
         >
           {open ? (
             <X className="h-4 w-4" aria-hidden="true" />
@@ -140,7 +140,7 @@ export function StickyNav() {
         id="aisoc-mobile-nav"
         className={cn(
           'lg:hidden',
-          'overflow-hidden border-t border-surface-border bg-surface-base/95 backdrop-blur-md transition-[max-height,opacity] duration-200 ease-landing-out-quart',
+          'overflow-hidden border-t border-velvet-border bg-velvet-surface-base/95 backdrop-blur-md transition-[max-height,opacity] duration-200 ease-landing-out-quart',
           open ? 'max-h-[60vh] opacity-100' : 'max-h-0 opacity-0',
         )}
       >
@@ -150,7 +150,7 @@ export function StickyNav() {
               <Link
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 text-sm font-medium text-fg-secondary transition-colors duration-150 ease-landing-out-quart hover:bg-surface-hover hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300"
+                className="block rounded-md px-3 py-2 text-sm font-medium text-velvet-content-secondary transition-colors duration-150 ease-landing-out-quart hover:bg-velvet-surface-overlay hover:text-velvet-content-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint"
               >
                 {link.label}
               </Link>
@@ -162,14 +162,14 @@ export function StickyNav() {
             href="https://github.com/beenuar/AiSOC"
             target="_blank"
             rel="noreferrer"
-            className="flex-1 rounded-md border border-surface-border bg-surface-raised/60 px-3 py-2 text-center text-sm font-medium text-fg-secondary"
+            className="flex-1 rounded-md border border-velvet-border bg-velvet-surface-raised/60 px-3 py-2 text-center text-sm font-medium text-velvet-content-secondary"
           >
             Self-host
           </a>
           <Link
             href="https://app.aisoc.dev/signup"
             onClick={() => setOpen(false)}
-            className="flex-1 rounded-md bg-gradient-to-br from-brand-500 to-brand-700 px-3 py-2 text-center text-sm font-semibold text-white"
+            className="flex-1 rounded-md bg-velvet-emerald-cta px-3 py-2 text-center text-sm font-semibold text-velvet-content-primary motion-safe:shadow-glow-emerald-sm"
           >
             Start free
           </Link>

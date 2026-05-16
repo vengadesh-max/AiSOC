@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { getPublicSiteUrl } from '@/lib/site';
+import { velvetFontVariables } from '@/lib/marketing-fonts';
 import { StickyNav } from '@/components/landing/sections/StickyNav';
 import { Hero } from '@/components/landing/sections/Hero';
 import { ProofStrip } from '@/components/landing/sections/ProofStrip';
@@ -212,7 +213,7 @@ export default function HomePage() {
       />
       <main
         data-theme="dark"
-        className="relative min-h-screen overflow-x-hidden bg-surface-base text-fg-primary"
+        className={`velvet-root relative min-h-screen overflow-x-hidden bg-velvet-surface-base font-velvet-body text-velvet-content-primary ${velvetFontVariables}`}
       >
         <StickyNav />
         <Hero />

@@ -23,14 +23,20 @@ export function ShineBorder({
   className,
   duration = 14,
   borderWidth = 1,
-  colors = ['#3b82f6', '#8b5cf6', '#1d4ed8'],
+  // VelvetEdge defaults — emerald → mint → sapphire tri-stop. Per spec
+  // rule 7 the consumer should not stack a third jewel tone on the same
+  // card body; the tail returns to the emerald hue family on purpose.
+  colors = ['#064E3B', '#34D399', '#1E3A8A'],
 }: ShineBorderProps) {
   const prefersReducedMotion = useReducedMotion();
   if (prefersReducedMotion) {
     return (
       <span
         aria-hidden="true"
-        className={cn('pointer-events-none absolute inset-0 rounded-[inherit] border border-brand-500/25', className)}
+        className={cn(
+          'pointer-events-none absolute inset-0 rounded-[inherit] border border-velvet-emerald/40',
+          className,
+        )}
       />
     );
   }

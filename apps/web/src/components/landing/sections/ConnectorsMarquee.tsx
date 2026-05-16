@@ -67,21 +67,21 @@ const CATEGORY_LABELS: ReadonlyArray<ConnectorPill['category']> = [
 ];
 
 const CATEGORY_COLOR: Record<ConnectorPill['category'], string> = {
-  EDR: 'bg-severity-critical/10 text-severity-critical ring-severity-critical/30',
-  SIEM: 'bg-brand-500/10 text-brand-300 ring-brand-500/30',
-  Cloud: 'bg-status-live/10 text-status-live ring-status-live/30',
-  IAM: 'bg-landing-accent-violet/10 text-landing-accent-violet ring-landing-accent-violet/30',
-  SaaS: 'bg-severity-medium/10 text-severity-medium ring-severity-medium/30',
-  VCS: 'bg-landing-accent-ember/10 text-landing-accent-ember ring-landing-accent-ember/30',
-  Network: 'bg-fg-muted/10 text-fg-secondary ring-surface-border',
+  EDR: 'bg-velvet-ruby/10 text-velvet-ruby-soft ring-velvet-ruby/30',
+  SIEM: 'bg-velvet-emerald/10 text-velvet-emerald-mint ring-velvet-emerald/30',
+  Cloud: 'bg-velvet-emerald-mint/10 text-velvet-emerald-mint ring-status-live/30',
+  IAM: 'bg-velvet-sapphire/10 text-velvet-sapphire-soft ring-velvet-sapphire/30',
+  SaaS: 'bg-velvet-warning/10 text-velvet-warning ring-velvet-warning/30',
+  VCS: 'bg-velvet-warning/10 text-velvet-warning ring-velvet-warning/30',
+  Network: 'bg-velvet-content-tertiary/10 text-velvet-content-secondary ring-velvet-border',
 };
 
 function Pill({ pill }: { pill: ConnectorPill }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-2 rounded-full border border-surface-border bg-surface-card/70 px-3 py-1.5 text-xs font-medium text-fg-primary backdrop-blur-sm shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]',
-        'transition-colors duration-200 ease-landing-out-quart hover:border-brand-500/40',
+        'inline-flex items-center gap-2 rounded-full border border-velvet-border bg-velvet-surface-raised/70 px-3 py-1.5 text-xs font-medium text-velvet-content-primary backdrop-blur-sm shadow-[0_1px_0_rgba(255,255,255,0.04)_inset]',
+        'transition-colors duration-200 ease-landing-out-quart hover:border-velvet-emerald/40',
       )}
     >
       <span
@@ -132,16 +132,16 @@ export function ConnectorsMarquee() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             Plug in everything
           </p>
           <h2
             id="connectors-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             69 connectors. 6,998 detections. 62 playbook packs.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-fg-secondary sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-velvet-content-secondary sm:text-lg">
             Every connector renders a schema-driven form, encrypts its
             secrets at the application layer, and starts polling on a
             per-instance schedule. When the catalogue doesn&apos;t have what
@@ -165,18 +165,18 @@ export function ConnectorsMarquee() {
           ))}
         </ul>
 
-        <p className="mt-10 text-center text-xs font-semibold uppercase tracking-[0.18em] text-fg-subtle">
+        <p className="mt-10 text-center text-xs font-semibold uppercase tracking-[0.18em] text-velvet-content-tertiary">
           A small sample
         </p>
 
         <div className="relative mt-4 space-y-3">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-surface-base to-transparent sm:w-24"
+            className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-velvet-surface-base to-transparent sm:w-24"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-surface-base to-transparent sm:w-24"
+            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-velvet-surface-base to-transparent sm:w-24"
           />
           <Marquee>
             {TOP_ROW.map((pill) => (
@@ -193,10 +193,10 @@ export function ConnectorsMarquee() {
         <div className="mx-auto mt-16 max-w-5xl">
           <div className="grid gap-6 lg:grid-cols-[1fr_1.5fr] lg:items-center">
             <div>
-              <h3 className="text-2xl font-bold tracking-tight text-fg-primary sm:text-3xl">
+              <h3 className="font-velvet-display font-normal text-2xl tracking-tight text-velvet-content-primary sm:text-3xl">
                 Write a connector in 50 lines.
               </h3>
-              <p className="mt-3 text-sm leading-relaxed text-fg-secondary">
+              <p className="mt-3 text-sm leading-relaxed text-velvet-content-secondary">
                 Each connector is a Python class that declares a schema,
                 tests its credentials, polls on a schedule, and normalises
                 events into OCSF. The plugin SDKs ship for Python,
@@ -204,7 +204,7 @@ export function ConnectorsMarquee() {
               </p>
               <Link
                 href="https://docs.aisoc.dev/connectors/sdk"
-                className="group mt-5 inline-flex items-center gap-1 text-sm font-semibold text-brand-300 transition-colors duration-200 hover:text-brand-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+                className="group mt-5 inline-flex items-center gap-1 text-sm font-semibold text-velvet-emerald-mint transition-colors duration-200 hover:text-velvet-emerald-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
               >
                 Read the connector SDK
                 <ArrowRight
@@ -215,7 +215,7 @@ export function ConnectorsMarquee() {
             </div>
             <pre
               aria-label="Example Python connector"
-              className="overflow-x-auto rounded-2xl border border-surface-border bg-surface-card/80 p-5 font-mono text-[12px] leading-relaxed text-fg-secondary shadow-[0_18px_48px_-32px_rgba(15,23,42,0.7)]"
+              className="overflow-x-auto rounded-2xl border border-velvet-border bg-velvet-surface-raised/80 p-5 font-mono text-[12px] leading-relaxed text-velvet-content-secondary shadow-[0_18px_48px_-32px_rgba(15,23,42,0.7)]"
             >
               <code>{SNIPPET}</code>
             </pre>

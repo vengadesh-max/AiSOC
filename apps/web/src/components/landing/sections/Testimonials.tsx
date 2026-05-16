@@ -33,12 +33,12 @@ export function Testimonials() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             From the people running it
           </p>
           <h2
             id="testimonials-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             What teams say after their first month.
           </h2>
@@ -49,7 +49,7 @@ export function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-15%' }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative mx-auto mt-12 max-w-2xl overflow-hidden rounded-2xl border border-surface-border bg-surface-card/80 p-8 backdrop-blur-sm sm:p-10 lg:mt-16"
+          className="relative mx-auto mt-12 max-w-2xl overflow-hidden rounded-2xl border border-velvet-border bg-velvet-surface-raised/80 p-8 backdrop-blur-sm sm:p-10 lg:mt-16"
         >
           {!prefersReducedMotion && (
             <Meteors number={14} className="opacity-50" />
@@ -57,14 +57,14 @@ export function Testimonials() {
           <div className="relative flex flex-col items-center text-center">
             <span
               aria-hidden="true"
-              className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500/20 to-landing-accent-violet/20 text-brand-300 ring-1 ring-inset ring-brand-500/30"
+              className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-velvet-emerald/20 to-velvet-sapphire/20 text-velvet-emerald-mint ring-1 ring-inset ring-velvet-emerald/30"
             >
               <ShieldCheck className="h-6 w-6" />
             </span>
-            <h3 className="mt-5 text-xl font-bold text-fg-primary sm:text-2xl">
+            <h3 className="font-velvet-display font-normal mt-5 text-xl text-velvet-content-primary sm:text-2xl">
               Be the first reference team.
             </h3>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-fg-secondary">
+            <p className="mt-3 max-w-xl text-base leading-relaxed text-velvet-content-secondary">
               We are onboarding reference partners through Q2 2026. If your
               team ships AiSOC into production, we will publish your case
               study under your byline, with the before/after metrics you
@@ -72,7 +72,7 @@ export function Testimonials() {
             </p>
             <Link
               href="/partners"
-              className="group mt-6 inline-flex h-10 items-center gap-2 rounded-md bg-gradient-to-br from-brand-500 to-brand-700 px-4 text-sm font-semibold text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart hover:shadow-[0_12px_32px_-12px_rgba(59,130,246,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+              className="group mt-6 inline-flex h-10 items-center gap-2 rounded-md bg-velvet-emerald-cta px-4 text-sm font-semibold text-velvet-content-primary shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart motion-safe:hover:shadow-glow-emerald-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
             >
               Become a reference partner
               <ArrowRight

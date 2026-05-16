@@ -71,8 +71,12 @@ export function GlowingEffect({
       )}
       style={{
         opacity: intensity,
+        // VelvetEdge halo — emerald → mint → sapphire conic so the proximity
+        // glow stays inside the spec's two-jewel-tone-per-element rule (rule
+        // 7). Reduced-motion users see no halo at all (component returns
+        // null above).
         background:
-          'conic-gradient(from 0deg at 50% 50%, rgba(59,130,246,0.18) 0deg, rgba(139,92,246,0.32) 120deg, rgba(59,130,246,0.18) 240deg, rgba(59,130,246,0) 360deg)',
+          'conic-gradient(from 0deg at 50% 50%, rgba(6,78,59,0.20) 0deg, rgba(52,211,153,0.32) 120deg, rgba(30,58,138,0.22) 240deg, rgba(6,78,59,0) 360deg)',
         filter: 'blur(24px)',
       }}
     />

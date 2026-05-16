@@ -56,7 +56,10 @@ export function Meteors({ number = 18, className }: MeteorsProps) {
         <span
           key={id}
           aria-hidden="true"
-          className="absolute h-0.5 w-0.5 rotate-[215deg] animate-meteor rounded-full bg-slate-200 shadow-[0_0_0_1px_rgba(255,255,255,0.1)] before:absolute before:top-1/2 before:h-px before:w-12 before:-translate-y-1/2 before:bg-gradient-to-r before:from-slate-100 before:to-transparent before:content-['']"
+          // VelvetEdge retheme — meteors are mint-tinted (`#34D399` at low
+          // alpha) so they read as emerald sparks against the jewel-tone
+          // surface base. The trail uses the same hue with a soft fade.
+          className="absolute h-0.5 w-0.5 rotate-[215deg] animate-meteor rounded-full bg-emerald-200 shadow-[0_0_0_1px_rgba(52,211,153,0.16)] before:absolute before:top-1/2 before:h-px before:w-12 before:-translate-y-1/2 before:bg-gradient-to-r before:from-emerald-200 before:to-transparent before:content-['']"
           style={{ top, left, animationDelay: delay, animationDuration: duration }}
         />
       ))}

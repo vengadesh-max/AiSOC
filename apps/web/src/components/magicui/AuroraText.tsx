@@ -19,7 +19,11 @@ export function AuroraText({ children, className }: AuroraTextProps) {
   return (
     <span
       className={cn(
-        'inline-block bg-gradient-to-r from-brand-300 via-landing-accent-violet to-brand-500 bg-clip-text text-transparent',
+        // VelvetEdge aurora — mint → emerald → mint. The hue family stays
+        // inside the emerald gem so the accent reads as a luminous variant
+        // of the body H1 colour rather than a competing jewel. Reduced
+        // motion freezes the gradient at its midpoint.
+        'inline-block bg-gradient-to-r from-velvet-emerald-mint via-velvet-emerald-light to-velvet-emerald-mint bg-clip-text text-transparent',
         !prefersReducedMotion && 'animate-aurora-shift [background-size:200%_100%]',
         className,
       )}

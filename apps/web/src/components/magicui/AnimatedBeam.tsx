@@ -35,10 +35,13 @@ export function AnimatedBeam({
   curvature = -30,
   duration = 3,
   delay = 0,
-  pathColor = 'rgba(148,163,184,0.18)',
+  // VelvetEdge default — faint mint stroke for the static base path so it
+  // reads as "absent" against surface-base, plus an emerald → sapphire
+  // comet so the moving accent stays inside the two-jewel-tone rule.
+  pathColor = 'rgba(52,211,153,0.18)',
   pathOpacity = 1,
-  gradientStart = '#3b82f6',
-  gradientStop = '#8b5cf6',
+  gradientStart = '#34D399',
+  gradientStop = '#1E3A8A',
   reverse = false,
 }: AnimatedBeamProps) {
   const id = useId();

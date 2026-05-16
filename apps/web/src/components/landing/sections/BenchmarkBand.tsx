@@ -64,16 +64,16 @@ export function BenchmarkBand() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             Reproducible by anyone
           </p>
           <h2
             id="benchmark-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             Benchmarked, not vibes.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-fg-secondary sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-velvet-content-secondary sm:text-lg">
             Five pytest suites gate every PR. 200 synthetic incidents drawn
             from 55 templates plus a 361-event telemetry corpus across 14
             log sources. Per-template macros catch the regression the
@@ -82,12 +82,12 @@ export function BenchmarkBand() {
           </p>
         </div>
 
-        <div className="relative mt-12 overflow-hidden rounded-3xl border border-surface-border bg-surface-card/60 shadow-[0_30px_80px_-32px_rgba(15,23,42,0.7)] lg:mt-16">
+        <div className="relative mt-12 overflow-hidden rounded-3xl border border-velvet-border bg-velvet-surface-raised/60 shadow-[0_30px_80px_-32px_rgba(15,23,42,0.7)] lg:mt-16">
           <div
             aria-hidden="true"
-            className="absolute inset-0 bg-landing-grad-pillars opacity-[0.08]"
+            className="absolute inset-0 bg-velvet-pillars-grad opacity-[0.08]"
           />
-          <ul className="relative grid grid-cols-1 divide-y divide-surface-border md:grid-cols-3 md:divide-x md:divide-y-0">
+          <ul className="relative grid grid-cols-1 divide-y divide-velvet-border md:grid-cols-3 md:divide-x md:divide-y-0">
             {METRICS.map((metric, idx) => (
               <motion.li
                 key={metric.label}
@@ -101,7 +101,7 @@ export function BenchmarkBand() {
                 }}
                 className="flex flex-col items-center gap-2 px-6 py-10 text-center"
               >
-                <p className="font-mono text-4xl font-semibold leading-none tracking-tight text-fg-primary tabular-nums sm:text-5xl lg:text-[56px]">
+                <p className="font-mono text-4xl font-semibold leading-none tracking-tight text-velvet-content-primary tabular-nums sm:text-5xl lg:text-[56px]">
                   {metric.value !== undefined ? (
                     <>
                       <NumberTicker
@@ -114,7 +114,7 @@ export function BenchmarkBand() {
                     metric.label
                   )}
                 </p>
-                <p className="max-w-[20ch] text-xs leading-relaxed text-fg-muted">
+                <p className="max-w-[20ch] text-xs leading-relaxed text-velvet-content-tertiary">
                   {metric.caption}
                 </p>
               </motion.li>
@@ -125,7 +125,7 @@ export function BenchmarkBand() {
         <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-5">
           <Link
             href="/benchmark"
-            className="group inline-flex h-11 items-center gap-2 rounded-md bg-gradient-to-br from-brand-500 to-brand-700 px-6 text-sm font-semibold text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart hover:shadow-[0_12px_32px_-12px_rgba(59,130,246,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="group inline-flex h-11 items-center gap-2 rounded-md bg-velvet-emerald-cta px-6 text-sm font-semibold text-velvet-content-primary shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart motion-safe:hover:shadow-glow-emerald-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             <GitCompare className="h-4 w-4" aria-hidden="true" />
             Read the methodology
@@ -136,7 +136,7 @@ export function BenchmarkBand() {
           </Link>
           <Link
             href="https://docs.aisoc.dev/benchmark-scoreboard"
-            className="inline-flex items-center gap-1 text-sm font-medium text-fg-muted transition-colors duration-200 hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="inline-flex items-center gap-1 text-sm font-medium text-velvet-content-tertiary transition-colors duration-200 hover:text-velvet-content-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             Open the public scoreboard
             <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />

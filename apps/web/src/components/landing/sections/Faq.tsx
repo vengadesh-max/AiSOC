@@ -85,7 +85,7 @@ function FaqRow({
   const panelId = `${idBase}-a-${index}`;
 
   return (
-    <div className="border-b border-surface-border last:border-b-0">
+    <div className="border-b border-velvet-border last:border-b-0">
       <dt>
         <button
           id={buttonId}
@@ -93,15 +93,15 @@ function FaqRow({
           aria-expanded={open}
           aria-controls={panelId}
           onClick={() => setOpen((prev) => !prev)}
-          className="flex w-full items-start justify-between gap-4 py-5 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base sm:py-6"
+          className="flex w-full items-start justify-between gap-4 py-5 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base sm:py-6"
         >
-          <span className="text-base font-semibold text-fg-primary sm:text-lg">
+          <span className="text-base font-semibold text-velvet-content-primary sm:text-lg">
             {qa.q}
           </span>
           <ChevronDown
             className={cn(
-              'mt-1 h-5 w-5 flex-none text-fg-muted transition-transform duration-300 ease-landing-out-quart motion-reduce:transition-none',
-              open && 'rotate-180 text-brand-300',
+              'mt-1 h-5 w-5 flex-none text-velvet-content-tertiary transition-transform duration-300 ease-landing-out-quart motion-reduce:transition-none',
+              open && 'rotate-180 text-velvet-emerald-mint',
             )}
             aria-hidden="true"
           />
@@ -113,7 +113,7 @@ function FaqRow({
         aria-labelledby={buttonId}
         hidden={!open}
         className={cn(
-          'overflow-hidden text-sm leading-relaxed text-fg-secondary sm:text-base',
+          'overflow-hidden text-sm leading-relaxed text-velvet-content-secondary sm:text-base',
           open && 'pb-5 sm:pb-6',
         )}
       >
@@ -134,12 +134,12 @@ export function Faq() {
     >
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             Questions, asked honestly
           </p>
           <h2
             id="faq-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             Frequently asked.
           </h2>

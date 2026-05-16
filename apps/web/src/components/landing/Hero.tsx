@@ -20,11 +20,11 @@ export function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-brand-400/30 bg-brand-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-brand-200">
+          <span className="inline-flex items-center gap-2 rounded-full border border-velvet-emerald-mint/30 bg-velvet-emerald/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-velvet-emerald-mint">
             Open-source · MIT · community-maintained
           </span>
 
-          <h1 className="mt-6 text-balance text-5xl font-bold leading-[1.05] tracking-tight text-white md:text-6xl lg:text-7xl">
+          <h1 className="font-velvet-display font-normal mt-6 text-balance text-5xl leading-[1.05] tracking-tight text-velvet-content-primary md:text-6xl lg:text-7xl">
             An auditable AI SOC.
           </h1>
 
@@ -44,7 +44,7 @@ export function Hero() {
               href="https://tryaisoc.com/cases/INC-RT-001?tab=ledger"
               target="_blank"
               rel="noreferrer"
-              className="group inline-flex items-center gap-2 rounded-lg bg-brand-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-400"
+              className="group inline-flex items-center gap-2 rounded-lg bg-velvet-emerald px-5 py-3 text-sm font-semibold text-velvet-content-primary transition hover:bg-velvet-emerald-mint"
             >
               Open the demo
               <svg viewBox="0 0 20 20" className="h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="currentColor" aria-hidden="true">
@@ -53,7 +53,7 @@ export function Hero() {
             </a>
             <Link
               href="/dashboard"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-white/30 hover:bg-white/[0.08]"
+              className="inline-flex items-center gap-2 rounded-lg border border-velvet-content-primary/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-velvet-content-primary/30 hover:bg-white/[0.08]"
             >
               Open console
             </Link>
@@ -61,7 +61,7 @@ export function Hero() {
               href="https://github.com/beenuar/AiSOC"
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-white/30 hover:bg-white/[0.08]"
+              className="inline-flex items-center gap-2 rounded-lg border border-velvet-content-primary/15 bg-white/[0.04] px-5 py-3 text-sm font-semibold text-gray-200 transition hover:border-velvet-content-primary/30 hover:bg-white/[0.08]"
             >
               <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true" fill="currentColor">
                 <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.69-3.88-1.54-3.88-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.69.08-.69 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.73-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 015.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z" />
@@ -76,7 +76,7 @@ export function Hero() {
 
           {/* Three facts the buyer can verify in the repo: ledger writes, the
               eval harness, and the license. */}
-          <dl className="mt-10 grid grid-cols-4 gap-5 border-t border-white/5 pt-8">
+          <dl className="mt-10 grid grid-cols-4 gap-5 border-t border-velvet-content-primary/5 pt-8">
             <Stat label="Connectors" value="26" caption="EDR, SIEM, cloud, IAM, SaaS — encrypted at rest" />
             <Stat label="Agent decisions" value="Ledger" caption="prompt + tool + rationale per step" />
             <Stat label="Eval harness" value="200 cases" caption="runs in CI on every PR to main" />
@@ -107,7 +107,7 @@ function Stat({ label, value, caption }: { label: string; value: string; caption
   return (
     <div>
       <dt className="text-xs font-semibold uppercase tracking-wider text-gray-500">{label}</dt>
-      <dd className="mt-2 text-2xl font-bold text-white">
+      <dd className="mt-2 text-2xl font-bold text-velvet-content-primary">
         {value}
         <span className="mt-1 block text-xs font-normal text-gray-500">{caption}</span>
       </dd>
@@ -127,10 +127,10 @@ function HeroVisual() {
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6, delay: 0.15 }}
-        className="absolute inset-0 overflow-hidden rounded-2xl border border-white/10 bg-surface-card/90 shadow-2xl backdrop-blur"
+        className="absolute inset-0 overflow-hidden rounded-2xl border border-velvet-content-primary/10 bg-velvet-surface-raised/90 shadow-2xl backdrop-blur"
       >
         {/* Window chrome */}
-        <div className="flex items-center gap-2 border-b border-white/5 bg-surface-raised/60 px-4 py-3">
+        <div className="flex items-center gap-2 border-b border-velvet-content-primary/5 bg-velvet-surface-raised/60 px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-rose-400/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
@@ -149,10 +149,10 @@ function HeroVisual() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.45 }}
-        className="absolute -bottom-6 -right-4 w-72 rounded-xl border border-white/10 bg-surface-card/95 p-4 shadow-2xl backdrop-blur sm:-right-8 sm:w-80"
+        className="absolute -bottom-6 -right-4 w-72 rounded-xl border border-velvet-content-primary/10 bg-velvet-surface-raised/95 p-4 shadow-2xl backdrop-blur sm:-right-8 sm:w-80"
       >
         <div className="mb-2 flex items-center gap-2 text-xs font-semibold text-gray-400">
-          <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-brand-500 text-[11px] font-bold text-white">
+          <span className="inline-flex h-6 w-6 items-center justify-center rounded-md bg-velvet-emerald text-[11px] font-bold text-velvet-content-primary">
             A
           </span>
           AiSOC Copilot
@@ -168,10 +168,10 @@ function HeroVisual() {
           revoking session tokens.
         </p>
         <div className="mt-3 flex gap-2">
-          <button className="rounded-md bg-brand-500/90 px-2.5 py-1 text-xs font-semibold text-white">
+          <button className="rounded-md bg-velvet-emerald/90 px-2.5 py-1 text-xs font-semibold text-velvet-content-primary">
             Isolate host
           </button>
-          <button className="rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs font-semibold text-gray-300">
+          <button className="rounded-md border border-velvet-content-primary/10 bg-white/[0.04] px-2.5 py-1 text-xs font-semibold text-gray-300">
             Open case
           </button>
         </div>
@@ -201,24 +201,27 @@ function SignalMap() {
     ['idp', 'wf', 'normal'],
   ];
 
+  // VelvetEdge attack-graph palette — emerald/mint for normal, ruby for
+  // critical, warning amber for stretched (each is the spec's semantic
+  // meaning). idp uses the sapphire surface to signal "informational".
   const nodeFill: Record<string, string> = {
-    edge: '#1e293b',
-    host: '#1e293b',
-    'host-warn': '#7c2d12',
-    'host-crit': '#7f1d1d',
-    idp: '#1e3a8a',
+    edge: '#181820',
+    host: '#181820',
+    'host-warn': '#3F1D0E',
+    'host-crit': '#4A0E1B',
+    idp: '#1E3A8A',
   };
   const nodeStroke: Record<string, string> = {
-    edge: '#475569',
-    host: '#3b82f6',
-    'host-warn': '#f97316',
-    'host-crit': '#ef4444',
-    idp: '#60a5fa',
+    edge: '#3A3A48',
+    host: '#34D399',
+    'host-warn': '#FBBF24',
+    'host-crit': '#FB7185',
+    idp: '#93C5FD',
   };
   const edgeStroke: Record<string, string> = {
-    normal: 'rgba(96,165,250,0.5)',
-    warn: 'rgba(249,115,22,0.7)',
-    crit: 'rgba(239,68,68,0.85)',
+    normal: 'rgba(52,211,153,0.5)',
+    warn: 'rgba(251,191,36,0.7)',
+    crit: 'rgba(251,113,133,0.85)',
   };
 
   return (

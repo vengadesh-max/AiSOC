@@ -93,58 +93,58 @@ function OptionCard({
         delay: index * 0.08,
       }}
       className={cn(
-        'relative flex flex-col gap-4 rounded-2xl border border-surface-border bg-surface-card/70 p-6 backdrop-blur-sm',
+        'relative flex flex-col gap-4 rounded-2xl border border-velvet-border bg-velvet-surface-raised/70 p-6 backdrop-blur-sm',
         option.recommended &&
-          'shadow-[0_24px_64px_-24px_rgba(59,130,246,0.45)]',
+          'motion-safe:shadow-glow-emerald-lg',
       )}
     >
       {option.recommended && <ShineBorder duration={14} borderWidth={1} />}
       <div className="relative flex items-center justify-between gap-3">
         <span
           aria-hidden="true"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500/20 to-landing-accent-violet/20 text-brand-300 ring-1 ring-inset ring-brand-500/30"
+          className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-velvet-emerald/20 to-velvet-sapphire/20 text-velvet-emerald-mint ring-1 ring-inset ring-velvet-emerald/30"
         >
           <Icon className="h-5 w-5" />
         </span>
         {option.recommended && (
-          <span className="inline-flex items-center rounded-full bg-brand-500/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-brand-300 ring-1 ring-inset ring-brand-500/40">
+          <span className="inline-flex items-center rounded-full bg-velvet-emerald/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-velvet-emerald-mint ring-1 ring-inset ring-velvet-emerald/40">
             Recommended
           </span>
         )}
       </div>
-      <h3 className="relative text-xl font-bold tracking-tight text-fg-primary">
+      <h3 className="font-velvet-display font-normal relative text-xl tracking-tight text-velvet-content-primary">
         {option.title}
       </h3>
       <dl className="relative space-y-2 text-xs">
-        <div className="flex items-baseline justify-between gap-2 border-b border-surface-border pb-2">
-          <dt className="font-semibold uppercase tracking-[0.12em] text-fg-subtle">
+        <div className="flex items-baseline justify-between gap-2 border-b border-velvet-border pb-2">
+          <dt className="font-semibold uppercase tracking-[0.12em] text-velvet-content-tertiary">
             Time to live
           </dt>
-          <dd className="text-right text-fg-primary">{option.timeToLive}</dd>
+          <dd className="text-right text-velvet-content-primary">{option.timeToLive}</dd>
         </div>
-        <div className="flex items-baseline justify-between gap-2 border-b border-surface-border pb-2">
-          <dt className="font-semibold uppercase tracking-[0.12em] text-fg-subtle">
+        <div className="flex items-baseline justify-between gap-2 border-b border-velvet-border pb-2">
+          <dt className="font-semibold uppercase tracking-[0.12em] text-velvet-content-tertiary">
             LLM
           </dt>
-          <dd className="text-right text-fg-primary">{option.llm}</dd>
+          <dd className="text-right text-velvet-content-primary">{option.llm}</dd>
         </div>
         <div className="flex items-baseline justify-between gap-2">
-          <dt className="font-semibold uppercase tracking-[0.12em] text-fg-subtle">
+          <dt className="font-semibold uppercase tracking-[0.12em] text-velvet-content-tertiary">
             Residency
           </dt>
-          <dd className="text-right text-fg-primary">{option.residency}</dd>
+          <dd className="text-right text-velvet-content-primary">{option.residency}</dd>
         </div>
       </dl>
-      <p className="relative text-sm leading-relaxed text-fg-secondary">
+      <p className="relative text-sm leading-relaxed text-velvet-content-secondary">
         {option.body}
       </p>
       <Link
         href={option.cta.href}
         className={cn(
-          'group relative mt-auto inline-flex h-10 items-center justify-center gap-1 rounded-md px-4 text-sm font-semibold transition-shadow duration-200 ease-landing-out-quart focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base',
+          'group relative mt-auto inline-flex h-10 items-center justify-center gap-1 rounded-md px-4 text-sm font-semibold transition-shadow duration-200 ease-landing-out-quart focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base',
           option.recommended
-            ? 'bg-gradient-to-br from-brand-500 to-brand-700 text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] hover:shadow-[0_12px_32px_-12px_rgba(59,130,246,0.65)]'
-            : 'border border-surface-border bg-surface-raised/60 text-fg-primary hover:border-brand-500/40',
+            ? 'bg-velvet-emerald-cta text-velvet-content-primary shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] motion-safe:hover:shadow-glow-emerald-sm'
+            : 'border border-velvet-border bg-velvet-surface-raised/60 text-velvet-content-primary hover:border-velvet-emerald/40',
         )}
       >
         {option.cta.label}
@@ -168,12 +168,12 @@ export function DeployOptions() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             Run AiSOC where your data is allowed to live
           </p>
           <h2
             id="deploy-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             Three deploy paths. Same code.
           </h2>

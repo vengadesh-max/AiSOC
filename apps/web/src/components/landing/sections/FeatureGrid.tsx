@@ -185,18 +185,18 @@ function FeatureTile({
         delay: (index % 6) * 0.06,
       }}
       className={cn(
-        'group relative flex flex-col gap-2 rounded-xl border border-surface-border bg-surface-card/60 p-5 backdrop-blur-sm',
-        'transition-[border-color,transform] duration-300 ease-landing-out-quart hover:-translate-y-0.5 hover:border-brand-500/40',
+        'group relative flex flex-col gap-2 rounded-xl border border-velvet-border bg-velvet-surface-raised/60 p-5 backdrop-blur-sm',
+        'transition-[border-color,transform] duration-300 ease-landing-out-quart hover:-translate-y-0.5 hover:border-velvet-emerald/40',
       )}
     >
       <span
         aria-hidden="true"
-        className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-brand-500/10 text-brand-300 ring-1 ring-inset ring-brand-500/30"
+        className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-velvet-emerald/10 text-velvet-emerald-mint ring-1 ring-inset ring-velvet-emerald/30"
       >
         <Icon className="h-4 w-4" />
       </span>
-      <h3 className="mt-1 text-sm font-semibold text-fg-primary">{tile.title}</h3>
-      <p className="text-xs leading-relaxed text-fg-secondary">{tile.body}</p>
+      <h3 className="font-velvet-display font-normal mt-1 text-sm text-velvet-content-primary">{tile.title}</h3>
+      <p className="text-xs leading-relaxed text-velvet-content-secondary">{tile.body}</p>
     </motion.li>
   );
 }
@@ -213,7 +213,7 @@ export function FeatureGrid() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2
           id="features-heading"
-          className="sr-only"
+          className="font-velvet-display font-normal sr-only"
         >
           Feature deep-dive
         </h2>
@@ -226,7 +226,7 @@ export function FeatureGrid() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-20%' }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="text-2xl font-bold tracking-tight text-fg-primary sm:text-3xl"
+                className="text-2xl font-bold tracking-tight text-velvet-content-primary sm:text-3xl"
               >
                 {block.title}
               </motion.h3>

@@ -74,18 +74,18 @@ const STEPS: ReadonlyArray<LedgerStep> = [
 ];
 
 const AGENT_COLOR: Record<LedgerStep['agent'], string> = {
-  Detect: 'text-brand-300 bg-brand-500/10 ring-brand-500/30',
+  Detect: 'text-velvet-emerald-mint bg-velvet-emerald/10 ring-velvet-emerald/30',
   Triage:
-    'text-landing-accent-violet bg-landing-accent-violet/10 ring-landing-accent-violet/30',
-  Hunt: 'text-brand-300 bg-brand-500/15 ring-brand-300/30',
+    'text-velvet-sapphire-soft bg-velvet-sapphire/10 ring-velvet-sapphire/30',
+  Hunt: 'text-velvet-emerald-mint bg-velvet-emerald/15 ring-velvet-emerald-mint/30',
   Respond:
-    'text-landing-accent-ember bg-landing-accent-ember/10 ring-landing-accent-ember/30',
+    'text-velvet-warning bg-velvet-warning/10 ring-velvet-warning/30',
 };
 
 const STATE_DOT: Record<LedgerStep['state'], string> = {
-  complete: 'bg-status-live',
-  active: 'bg-brand-400 animate-pulse',
-  queued: 'bg-status-idle',
+  complete: 'bg-velvet-emerald-mint',
+  active: 'bg-velvet-emerald-mint animate-pulse',
+  queued: 'bg-velvet-content-tertiary',
 };
 
 export function DemoEmbed() {
@@ -100,16 +100,16 @@ export function DemoEmbed() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             See it work
           </p>
           <h2
             id="demo-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             Watch AiSOC investigate a live ransomware incident.
           </h2>
-          <p className="mt-4 text-base leading-relaxed text-fg-secondary sm:text-lg">
+          <p className="mt-4 text-base leading-relaxed text-velvet-content-secondary sm:text-lg">
             INC-RT-001 is a LockBit 3.0 case that ships with every install.
             The ledger streams every prompt, tool call, and decision the
             agent made. Scrub the timeline, pause on any step, fork the
@@ -124,26 +124,26 @@ export function DemoEmbed() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="relative mx-auto mt-12 max-w-5xl lg:mt-16"
         >
-          <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface-card/80 shadow-[0_30px_80px_-32px_rgba(15,23,42,0.8)] backdrop-blur-sm">
-            <header className="flex items-center justify-between gap-3 border-b border-surface-border px-4 py-3 sm:px-6">
+          <div className="relative overflow-hidden rounded-2xl border border-velvet-border bg-velvet-surface-raised/80 shadow-[0_30px_80px_-32px_rgba(15,23,42,0.8)] backdrop-blur-sm">
+            <header className="flex items-center justify-between gap-3 border-b border-velvet-border px-4 py-3 sm:px-6">
               <div className="flex items-center gap-2">
                 <span
                   aria-hidden="true"
-                  className="inline-flex h-2.5 w-2.5 rounded-full bg-severity-critical"
+                  className="inline-flex h-2.5 w-2.5 rounded-full bg-velvet-ruby"
                 />
                 <span
                   aria-hidden="true"
-                  className="inline-flex h-2.5 w-2.5 rounded-full bg-status-warn"
+                  className="inline-flex h-2.5 w-2.5 rounded-full bg-velvet-warning"
                 />
                 <span
                   aria-hidden="true"
-                  className="inline-flex h-2.5 w-2.5 rounded-full bg-status-live"
+                  className="inline-flex h-2.5 w-2.5 rounded-full bg-velvet-emerald-mint"
                 />
               </div>
-              <p className="hidden text-xs font-mono text-fg-muted sm:block">
+              <p className="hidden text-xs font-mono text-velvet-content-tertiary sm:block">
                 aisoc.dev/cases/INC-RT-001?tab=ledger
               </p>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fg-subtle">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-velvet-content-tertiary">
                 Live
               </p>
             </header>
@@ -151,18 +151,18 @@ export function DemoEmbed() {
             <div className="grid gap-0 md:grid-cols-[1fr_320px]">
               <div className="px-4 py-5 sm:px-6 sm:py-6">
                 <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-severity-critical/10 px-2.5 py-1 text-severity-critical ring-1 ring-inset ring-severity-critical/30">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-velvet-ruby/10 px-2.5 py-1 text-velvet-ruby-soft ring-1 ring-inset ring-velvet-ruby/30">
                     <span
                       aria-hidden="true"
-                      className="inline-block h-1.5 w-1.5 rounded-full bg-severity-critical"
+                      className="inline-block h-1.5 w-1.5 rounded-full bg-velvet-ruby"
                     />
                     Critical
                   </span>
-                  <span className="text-fg-muted">INC-RT-001</span>
-                  <span className="text-fg-subtle">·</span>
-                  <span className="text-fg-muted">LockBit 3.0</span>
-                  <span className="text-fg-subtle">·</span>
-                  <span className="text-fg-muted">step 14 of 32</span>
+                  <span className="text-velvet-content-tertiary">INC-RT-001</span>
+                  <span className="text-velvet-content-tertiary">·</span>
+                  <span className="text-velvet-content-tertiary">LockBit 3.0</span>
+                  <span className="text-velvet-content-tertiary">·</span>
+                  <span className="text-velvet-content-tertiary">step 14 of 32</span>
                 </div>
 
                 <ol className="mt-5 space-y-2 font-mono">
@@ -180,7 +180,7 @@ export function DemoEmbed() {
                       className={cn(
                         'flex items-start gap-3 rounded-lg px-3 py-2 text-[11.5px] leading-relaxed',
                         step.state === 'active' &&
-                          'bg-brand-500/5 ring-1 ring-inset ring-brand-500/30',
+                          'bg-velvet-emerald/5 ring-1 ring-inset ring-velvet-emerald/30',
                       )}
                     >
                       <span
@@ -190,7 +190,7 @@ export function DemoEmbed() {
                           STATE_DOT[step.state],
                         )}
                       />
-                      <span className="w-8 shrink-0 text-fg-subtle">
+                      <span className="w-8 shrink-0 text-velvet-content-tertiary">
                         #{step.step}
                       </span>
                       <span
@@ -202,65 +202,65 @@ export function DemoEmbed() {
                         {step.agent}
                       </span>
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-fg-primary">
+                        <p className="truncate text-velvet-content-primary">
                           {step.action}
                           {step.state === 'active' && (
                             <span
                               aria-hidden="true"
-                              className="ml-1 inline-block h-3 w-2 translate-y-0.5 bg-brand-400 motion-safe:animate-pulse motion-reduce:opacity-50"
+                              className="ml-1 inline-block h-3 w-2 translate-y-0.5 bg-velvet-emerald-mint motion-safe:animate-pulse motion-reduce:opacity-50"
                             />
                           )}
                         </p>
-                        <p className="text-fg-muted">→ {step.result}</p>
+                        <p className="text-velvet-content-tertiary">→ {step.result}</p>
                       </div>
                     </motion.li>
                   ))}
                 </ol>
               </div>
 
-              <aside className="border-t border-surface-border bg-surface-base/60 px-4 py-5 sm:px-6 sm:py-6 md:border-l md:border-t-0">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fg-subtle">
+              <aside className="border-t border-velvet-border bg-velvet-surface-base/60 px-4 py-5 sm:px-6 sm:py-6 md:border-l md:border-t-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-velvet-content-tertiary">
                   Investigation summary
                 </p>
                 <dl className="mt-4 space-y-4 text-xs">
                   <div className="flex items-start gap-3">
                     <Clock
-                      className="mt-0.5 h-3.5 w-3.5 text-brand-300"
+                      className="mt-0.5 h-3.5 w-3.5 text-velvet-emerald-mint"
                       aria-hidden="true"
                     />
                     <div>
-                      <dt className="text-fg-subtle">Elapsed</dt>
-                      <dd className="font-mono text-fg-primary">00:01:47</dd>
+                      <dt className="text-velvet-content-tertiary">Elapsed</dt>
+                      <dd className="font-mono text-velvet-content-primary">00:01:47</dd>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <Cpu
-                      className="mt-0.5 h-3.5 w-3.5 text-brand-300"
+                      className="mt-0.5 h-3.5 w-3.5 text-velvet-emerald-mint"
                       aria-hidden="true"
                     />
                     <div>
-                      <dt className="text-fg-subtle">LLM spend</dt>
-                      <dd className="font-mono text-fg-primary">$0.084</dd>
-                      <dd className="text-fg-muted">claude-4-haiku · 14 calls</dd>
+                      <dt className="text-velvet-content-tertiary">LLM spend</dt>
+                      <dd className="font-mono text-velvet-content-primary">$0.084</dd>
+                      <dd className="text-velvet-content-tertiary">claude-4-haiku · 14 calls</dd>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
                     <Database
-                      className="mt-0.5 h-3.5 w-3.5 text-brand-300"
+                      className="mt-0.5 h-3.5 w-3.5 text-velvet-emerald-mint"
                       aria-hidden="true"
                     />
                     <div>
-                      <dt className="text-fg-subtle">Touched</dt>
-                      <dd className="font-mono text-fg-primary">4 hosts · 2 users</dd>
-                      <dd className="text-fg-muted">38 process events</dd>
+                      <dt className="text-velvet-content-tertiary">Touched</dt>
+                      <dd className="font-mono text-velvet-content-primary">4 hosts · 2 users</dd>
+                      <dd className="text-velvet-content-tertiary">38 process events</dd>
                     </div>
                   </div>
                 </dl>
-                <hr className="my-5 border-surface-border" />
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-fg-subtle">
+                <hr className="my-5 border-velvet-border" />
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-velvet-content-tertiary">
                   Next planned action
                 </p>
-                <p className="mt-2 text-xs leading-relaxed text-fg-secondary">
+                <p className="mt-2 text-xs leading-relaxed text-velvet-content-secondary">
                   Quarantine WS-RT-014 + force-rotate <span className="font-mono">oliver.tan</span> session.
                   L2 approval requested in <span className="font-mono">#soc-approvals</span>.
                 </p>
@@ -268,7 +268,7 @@ export function DemoEmbed() {
             </div>
           </div>
           {!prefersReducedMotion && (
-            <BorderBeam duration={14} size={220} colorFrom="#3b82f6" colorTo="#8b5cf6" />
+            <BorderBeam duration={14} size={220} colorFrom="#34D399" colorTo="#1E3A8A" />
           )}
           <figcaption className="sr-only">
             INC-RT-001 LockBit 3.0 investigation, paused on step 14 of 32 inside
@@ -279,7 +279,7 @@ export function DemoEmbed() {
         <div className="mx-auto mt-10 flex max-w-3xl flex-col items-center justify-center gap-3 text-center sm:flex-row sm:gap-5">
           <Link
             href="https://github.com/beenuar/AiSOC#5-minute-demo"
-            className="group inline-flex h-11 items-center gap-2 rounded-md bg-gradient-to-br from-brand-500 to-brand-700 px-6 text-sm font-semibold text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart hover:shadow-[0_12px_32px_-12px_rgba(59,130,246,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="group inline-flex h-11 items-center gap-2 rounded-md bg-velvet-emerald-cta px-6 text-sm font-semibold text-velvet-content-primary shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart motion-safe:hover:shadow-glow-emerald-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             Run this yourself in 5 minutes
             <ArrowRight
@@ -289,7 +289,7 @@ export function DemoEmbed() {
           </Link>
           <Link
             href="https://docs.aisoc.dev/architecture"
-            className="inline-flex items-center gap-1 text-sm font-medium text-fg-muted transition-colors duration-200 hover:text-fg-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="inline-flex items-center gap-1 text-sm font-medium text-velvet-content-tertiary transition-colors duration-200 hover:text-velvet-content-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             Read the architecture
             <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />

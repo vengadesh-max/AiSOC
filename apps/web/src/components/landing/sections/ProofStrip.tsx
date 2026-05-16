@@ -46,15 +46,15 @@ function StackWordmark({ name, caption }: { name: string; caption: string }) {
   return (
     <div
       className={cn(
-        'flex items-center gap-3 rounded-md px-4 py-3 text-fg-muted',
-        'border border-transparent hover:border-surface-border hover:text-fg-secondary',
+        'flex items-center gap-3 rounded-md px-4 py-3 text-velvet-content-tertiary',
+        'border border-transparent hover:border-velvet-border hover:text-velvet-content-secondary',
         'transition-colors duration-200 ease-landing-out-quart',
       )}
     >
-      <span className="text-sm font-semibold tracking-[-0.005em] text-fg-secondary">
+      <span className="text-sm font-semibold tracking-[-0.005em] text-velvet-content-secondary">
         {name}
       </span>
-      <span className="hidden text-xs font-medium text-fg-subtle sm:inline">
+      <span className="hidden text-xs font-medium text-velvet-content-tertiary sm:inline">
         {caption}
       </span>
     </div>
@@ -66,12 +66,12 @@ export function ProofStrip() {
     <section
       id="proof-strip"
       aria-labelledby="proof-strip-heading"
-      className="relative border-y border-surface-border/60 bg-surface-base/60 py-12 sm:py-14"
+      className="relative border-y border-velvet-border/60 bg-velvet-surface-base/60 py-12 sm:py-14"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h2
           id="proof-strip-heading"
-          className="text-center text-xs font-semibold uppercase tracking-[0.18em] text-fg-subtle"
+          className="font-velvet-display font-normal text-center text-xs uppercase tracking-[0.18em] text-velvet-content-tertiary"
         >
           Built on the open-source stack you already trust
         </h2>
@@ -79,11 +79,11 @@ export function ProofStrip() {
         <div className="relative mt-6">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-surface-base to-transparent sm:w-24"
+            className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-velvet-surface-base to-transparent sm:w-24"
           />
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-surface-base to-transparent sm:w-24"
+            className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-velvet-surface-base to-transparent sm:w-24"
           />
           <Marquee className="[--gap:0.5rem] sm:[--gap:2rem]">
             {STACK_WORDMARKS.map((stack) => (
@@ -93,7 +93,7 @@ export function ProofStrip() {
         </div>
 
         <div className="mt-10 flex flex-col items-center gap-4">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-fg-subtle">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-content-tertiary">
             Design partners
           </p>
           <ul
@@ -103,17 +103,17 @@ export function ProofStrip() {
             {PARTNER_PLACEHOLDERS.map((partner) => (
               <li
                 key={partner}
-                className="inline-flex items-center gap-2 rounded-full border border-dashed border-surface-border bg-surface-raised/30 px-4 py-1.5 text-xs font-medium text-fg-subtle"
+                className="inline-flex items-center gap-2 rounded-full border border-dashed border-velvet-border bg-velvet-surface-raised/30 px-4 py-1.5 text-xs font-medium text-velvet-content-tertiary"
               >
                 <span
                   aria-hidden="true"
-                  className="inline-block h-1.5 w-1.5 rounded-full bg-fg-subtle/40"
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-velvet-content-tertiary/40"
                 />
                 {partner}
               </li>
             ))}
           </ul>
-          <p className="text-xs text-fg-subtle">
+          <p className="text-xs text-velvet-content-tertiary">
             Reference partners onboarding through Q2 2026
           </p>
         </div>

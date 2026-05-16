@@ -18,7 +18,9 @@ interface WavyBackgroundProps {
   waveOpacity?: number;
 }
 
-const WAVE_STROKES = ['#1d4ed8', '#3b82f6', '#8b5cf6'] as const;
+// VelvetEdge wave strokes — emerald → mint → sapphire so the final-CTA
+// band reads as a jewel-tone gradient rather than the brand-blue legacy.
+const WAVE_STROKES = ['#064E3B', '#34D399', '#1E3A8A'] as const;
 
 export function WavyBackground({
   children,
@@ -30,7 +32,10 @@ export function WavyBackground({
   return (
     <div
       className={cn(
-        'relative isolate overflow-hidden bg-landing-grad-cta',
+        // VelvetEdge final-cta gradient is the new emerald → ruby surface
+        // wash; falls back gracefully when reduced-motion suppresses the
+        // animated waves above.
+        'relative isolate overflow-hidden bg-velvet-cta-grad',
         containerClassName,
       )}
     >

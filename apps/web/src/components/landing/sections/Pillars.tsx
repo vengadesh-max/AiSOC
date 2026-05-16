@@ -104,40 +104,40 @@ function PillarCard({
       }}
       className="group relative"
     >
-      <div className="relative h-full overflow-hidden rounded-2xl border border-surface-border bg-surface-card/70 p-6 backdrop-blur-sm transition-shadow duration-300 ease-landing-out-quart hover:shadow-[0_24px_64px_-32px_rgba(59,130,246,0.4)]">
+      <div className="relative h-full overflow-hidden rounded-md border border-velvet-border bg-velvet-surface-raised p-6 backdrop-blur-sm transition-[border-color,box-shadow] duration-300 ease-landing-out-quart hover:border-velvet-emerald/60 motion-safe:hover:shadow-glow-emerald-md">
         <GlowingEffect proximity={120} inactiveZone={0.35} />
         <div className="relative flex items-start gap-4">
           <span
             aria-hidden="true"
-            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500/20 to-landing-accent-violet/20 text-brand-300 ring-1 ring-inset ring-brand-500/30"
+            className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-gradient-to-br from-velvet-emerald/30 to-velvet-sapphire/20 text-velvet-emerald-mint ring-1 ring-inset ring-velvet-emerald/40"
           >
             <Icon className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <h3 className="text-base font-semibold tracking-tight text-fg-primary sm:text-lg">
+            <h3 className="font-velvet-display font-normal text-base tracking-tight text-velvet-content-primary sm:text-lg">
               {pillar.title}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-fg-secondary">
+            <p className="mt-2 text-sm leading-relaxed text-velvet-content-secondary">
               {pillar.body}
             </p>
           </div>
         </div>
-        <hr className="my-5 border-surface-border" />
+        <hr className="my-5 border-velvet-border" />
         <div className="relative flex flex-wrap items-end justify-between gap-3">
           <div>
             <p
               className={cn(
-                'font-mono text-2xl font-semibold tracking-tight text-fg-primary tabular-nums',
+                'font-mono text-2xl font-semibold tracking-tight text-velvet-content-primary tabular-nums',
                 'sm:text-3xl',
               )}
             >
               {pillar.stat}
             </p>
-            <p className="text-xs text-fg-muted">{pillar.statLabel}</p>
+            <p className="text-xs text-velvet-content-tertiary">{pillar.statLabel}</p>
           </div>
           <Link
             href={pillar.href}
-            className="group/link inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-brand-300 transition-colors duration-200 hover:text-brand-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+            className="group/link inline-flex items-center gap-1 rounded-md px-2 py-1 text-xs font-semibold text-velvet-emerald-mint transition-colors duration-200 hover:text-velvet-emerald-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
           >
             {pillar.linkLabel}
             <ArrowRight
@@ -162,12 +162,12 @@ export function Pillars() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
             What makes AiSOC different
           </p>
           <h2
             id="pillars-heading"
-            className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+            className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
           >
             Four promises we hold ourselves to.
           </h2>

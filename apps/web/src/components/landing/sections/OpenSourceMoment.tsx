@@ -49,16 +49,16 @@ export function OpenSourceMoment() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
           <motion.div {...(fadeIn(0) || {})}>
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-brand-400">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-velvet-emerald-mint">
               MIT all the way down
             </p>
             <h2
               id="open-source-heading"
-              className="mt-3 text-3xl font-bold tracking-tight text-fg-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
+              className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary sm:text-4xl lg:text-[40px] lg:leading-[1.15] lg:tracking-[-0.015em]"
             >
               Every detection rule public. Every benchmark reproducible.
             </h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-fg-secondary">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-velvet-content-secondary">
               Fork the agent, fork the rules, fork the harness. We measure
               ourselves on the same metrics we publish, and we ship the
               dataset that produced them. There is no private fork.
@@ -68,7 +68,7 @@ export function OpenSourceMoment() {
                 href={REPO_URL}
                 rel="noreferrer"
                 target="_blank"
-                className="group inline-flex h-10 items-center gap-2 rounded-md bg-gradient-to-br from-brand-500 to-brand-700 px-4 text-sm font-semibold text-white shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart hover:shadow-[0_12px_32px_-12px_rgba(59,130,246,0.65)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+                className="group inline-flex h-10 items-center gap-2 rounded-md bg-velvet-emerald-cta px-4 text-sm font-semibold text-velvet-content-primary shadow-[0_1px_0_rgba(255,255,255,0.18)_inset] transition-shadow duration-200 ease-landing-out-quart motion-safe:hover:shadow-glow-emerald-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
               >
                 <Star className="h-4 w-4" aria-hidden="true" />
                 Star on GitHub
@@ -81,7 +81,7 @@ export function OpenSourceMoment() {
                 href={CONTRIBUTING_URL}
                 rel="noreferrer"
                 target="_blank"
-                className="inline-flex h-10 items-center gap-2 rounded-md border border-surface-border bg-surface-raised/60 px-4 text-sm font-semibold text-fg-primary transition-colors duration-200 hover:border-brand-500/40 hover:text-brand-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base"
+                className="inline-flex h-10 items-center gap-2 rounded-md border border-velvet-border bg-velvet-surface-raised/60 px-4 text-sm font-semibold text-velvet-content-primary transition-colors duration-200 hover:border-velvet-emerald/40 hover:text-velvet-emerald-mint focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base"
               >
                 <GitBranch className="h-4 w-4" aria-hidden="true" />
                 Read CONTRIBUTING.md
@@ -90,9 +90,9 @@ export function OpenSourceMoment() {
           </motion.div>
 
           <motion.div {...(fadeIn(0.12) || {})} className="relative">
-            <div className="relative overflow-hidden rounded-2xl border border-surface-border bg-surface-card/80 backdrop-blur-sm">
-              <BorderBeam size={160} duration={14} colorFrom="#3b82f6" colorTo="#8b5cf6" />
-              <div className="flex items-center gap-2 border-b border-surface-border bg-surface-raised/70 px-4 py-3 text-xs text-fg-muted">
+            <div className="relative overflow-hidden rounded-2xl border border-velvet-border bg-velvet-surface-raised/80 backdrop-blur-sm">
+              <BorderBeam size={160} duration={14} colorFrom="#34D399" colorTo="#1E3A8A" />
+              <div className="flex items-center gap-2 border-b border-velvet-border bg-velvet-surface-raised/70 px-4 py-3 text-xs text-velvet-content-tertiary">
                 <span className="flex gap-1.5" aria-hidden="true">
                   <span className="h-2.5 w-2.5 rounded-full bg-red-500/70" />
                   <span className="h-2.5 w-2.5 rounded-full bg-amber-400/70" />
@@ -104,38 +104,38 @@ export function OpenSourceMoment() {
                 <div className="flex items-start gap-3">
                   <span
                     aria-hidden="true"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-fg-primary/10 text-fg-primary"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-lg bg-velvet-content-primary/10 text-velvet-content-primary"
                   >
                     <GithubMark className="h-5 w-5" />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-fg-primary">
+                    <p className="text-sm font-semibold text-velvet-content-primary">
                       beenuar / AiSOC
                     </p>
-                    <p className="text-xs text-fg-muted">
+                    <p className="text-xs text-velvet-content-tertiary">
                       <span aria-label="GitHub stars">★ 2.3k</span> · MIT · TypeScript / Python / Go
                     </p>
                   </div>
                 </div>
-                <p className="text-sm leading-relaxed text-fg-secondary">
+                <p className="text-sm leading-relaxed text-velvet-content-secondary">
                   Clone, demo, and inspect a live case in three commands:
                 </p>
-                <pre className="overflow-x-auto rounded-lg border border-surface-border bg-surface-raised/60 p-4 text-xs leading-relaxed text-fg-secondary">
+                <pre className="overflow-x-auto rounded-lg border border-velvet-border bg-velvet-surface-raised/60 p-4 text-xs leading-relaxed text-velvet-content-secondary">
                   <code className="block whitespace-pre font-mono">
-                    <span className="select-none text-fg-muted">$ </span>
-                    <span className="text-brand-300">git clone</span>{' '}
-                    <span className="text-fg-primary">https://github.com/beenuar/AiSOC.git</span>
+                    <span className="select-none text-velvet-content-tertiary">$ </span>
+                    <span className="text-velvet-emerald-mint">git clone</span>{' '}
+                    <span className="text-velvet-content-primary">https://github.com/beenuar/AiSOC.git</span>
                     {'\n'}
-                    <span className="select-none text-fg-muted">$ </span>
-                    <span className="text-brand-300">cd</span>{' '}
-                    <span className="text-fg-primary">AiSOC</span>
+                    <span className="select-none text-velvet-content-tertiary">$ </span>
+                    <span className="text-velvet-emerald-mint">cd</span>{' '}
+                    <span className="text-velvet-content-primary">AiSOC</span>
                     {'\n'}
-                    <span className="select-none text-fg-muted">$ </span>
-                    <span className="text-brand-300">pnpm</span>{' '}
-                    <span className="text-fg-primary">aisoc:demo</span>
+                    <span className="select-none text-velvet-content-tertiary">$ </span>
+                    <span className="text-velvet-emerald-mint">pnpm</span>{' '}
+                    <span className="text-velvet-content-primary">aisoc:demo</span>
                   </code>
                 </pre>
-                <div className="flex items-center gap-2 text-xs text-fg-muted">
+                <div className="flex items-center gap-2 text-xs text-velvet-content-tertiary">
                   <Terminal className="h-3.5 w-3.5" aria-hidden="true" />
                   <span>Boots a pre-seeded case in under a minute.</span>
                 </div>

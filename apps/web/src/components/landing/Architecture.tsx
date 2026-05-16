@@ -6,7 +6,7 @@ const LAYERS = [
   {
     label: 'Sources',
     items: ['Cloud trails', 'EDR', 'Identity', 'Network', 'SaaS APIs', 'Custom'],
-    tone: 'border-brand-500/30 bg-brand-500/5 text-brand-100',
+    tone: 'border-velvet-emerald/30 bg-velvet-emerald/5 text-velvet-emerald-mint',
   },
   {
     label: 'Ingest',
@@ -51,10 +51,10 @@ export function Architecture() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="text-xs font-semibold uppercase tracking-wider text-brand-300">
+          <span className="text-xs font-semibold uppercase tracking-wider text-velvet-emerald-mint">
             How it works
           </span>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight text-white md:text-5xl">
+          <h2 className="font-velvet-display font-normal mt-3 text-4xl tracking-tight text-velvet-content-primary md:text-5xl">
             Pipeline overview
           </h2>
           <p className="mt-4 text-lg text-gray-400">
@@ -72,12 +72,12 @@ export function Architecture() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.4, delay: i * 0.06 }}
-              className={`relative rounded-xl border bg-surface-card/40 p-4 ${layer.tone}`}
+              className={`relative rounded-xl border bg-velvet-surface-raised/40 p-4 ${layer.tone}`}
             >
               <div className="text-[10px] font-bold uppercase tracking-widest opacity-80">
                 Stage {i + 1}
               </div>
-              <div className="mt-1 text-base font-semibold text-white">{layer.label}</div>
+              <div className="mt-1 text-base font-semibold text-velvet-content-primary">{layer.label}</div>
               <ul className="mt-3 space-y-1 text-xs text-gray-300">
                 {layer.items.map((item) => (
                   <li key={item} className="flex items-center gap-2">
@@ -94,7 +94,7 @@ export function Architecture() {
         </div>
 
         {/* Storage tier */}
-        <div className="mt-10 rounded-2xl border border-white/5 bg-surface-card/40 p-6">
+        <div className="mt-10 rounded-2xl border border-velvet-content-primary/5 bg-velvet-surface-raised/40 p-6">
           <div className="flex items-center justify-between">
             <div>
               <div className="text-xs font-semibold uppercase tracking-wider text-gray-400">
@@ -112,9 +112,9 @@ export function Architecture() {
             {STORES.map((s) => (
               <span
                 key={s.name}
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-xs"
+                className="inline-flex items-center gap-2 rounded-full border border-velvet-content-primary/10 bg-white/[0.04] px-3 py-1.5 text-xs"
               >
-                <span className="font-mono font-semibold text-white">{s.name}</span>
+                <span className="font-mono font-semibold text-velvet-content-primary">{s.name}</span>
                 <span className="text-gray-500">·</span>
                 <span className="text-gray-400">{s.use}</span>
               </span>

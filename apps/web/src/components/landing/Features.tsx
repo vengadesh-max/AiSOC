@@ -136,10 +136,10 @@ export function Features() {
           transition={{ duration: 0.5 }}
           className="mx-auto max-w-2xl text-center"
         >
-          <span className="text-xs font-semibold uppercase tracking-wider text-brand-300">
+          <span className="text-xs font-semibold uppercase tracking-wider text-velvet-emerald-mint">
             Platform
           </span>
-          <h2 className="mt-3 text-4xl font-bold tracking-tight text-white md:text-5xl">
+          <h2 className="font-velvet-display font-normal mt-3 text-4xl tracking-tight text-velvet-content-primary md:text-5xl">
             What is in the box
           </h2>
           <p className="mt-4 text-lg text-gray-400">
@@ -156,10 +156,10 @@ export function Features() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.4, delay: i * 0.04 }}
-              className="group relative overflow-hidden rounded-2xl border border-white/5 bg-surface-card/50 p-6 transition hover:border-white/15 hover:bg-surface-card"
+              className="group relative overflow-hidden rounded-2xl border border-velvet-content-primary/5 bg-velvet-surface-raised/50 p-6 transition hover:border-velvet-content-primary/15 hover:bg-velvet-surface-raised"
             >
               <div className="relative">
-                <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.04] text-brand-300">
+                <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg border border-velvet-content-primary/10 bg-white/[0.04] text-velvet-emerald-mint">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
@@ -172,7 +172,7 @@ export function Features() {
                     {feature.icon}
                   </svg>
                 </div>
-                <h3 className="mt-5 text-lg font-semibold text-white">{feature.title}</h3>
+                <h3 className="font-velvet-display font-normal mt-5 text-lg text-velvet-content-primary">{feature.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-gray-400">{feature.description}</p>
               </div>
             </motion.div>

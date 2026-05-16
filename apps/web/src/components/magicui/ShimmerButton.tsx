@@ -20,7 +20,9 @@ export const ShimmerButton = forwardRef<HTMLButtonElement, ShimmerButtonProps>(
     {
       children,
       className,
-      shimmerColor = 'rgba(147,197,253,0.65)',
+      // VelvetEdge default — mint sheen (`#34D399` at low alpha) over the
+      // emerald 135deg gradient body.
+      shimmerColor = 'rgba(52,211,153,0.55)',
       shimmerDuration = '2.5s',
       ...rest
     },
@@ -30,8 +32,8 @@ export const ShimmerButton = forwardRef<HTMLButtonElement, ShimmerButtonProps>(
       <button
         ref={ref}
         className={cn(
-          'group/shimmer relative inline-flex h-11 cursor-pointer items-center justify-center overflow-hidden rounded-md bg-gradient-to-br from-brand-500 to-brand-700 px-6 text-sm font-semibold text-white shadow-[0_0_0_1px_rgba(59,130,246,0.35)] transition-shadow duration-200 ease-landing-in-out-quad',
-          'hover:shadow-[0_8px_24px_-8px_rgba(59,130,246,0.55)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-300 focus-visible:ring-offset-2 focus-visible:ring-offset-surface-base',
+          'group/shimmer relative inline-flex h-11 cursor-pointer items-center justify-center overflow-hidden rounded-md bg-velvet-emerald-cta px-6 text-sm font-semibold text-velvet-content-primary shadow-[0_0_0_1px_rgba(6,78,59,0.35)] transition-[filter,box-shadow] duration-200 ease-landing-in-out-quad',
+          'hover:brightness-110 motion-safe:hover:shadow-glow-emerald-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-velvet-emerald-mint focus-visible:ring-offset-2 focus-visible:ring-offset-velvet-surface-base',
           'motion-reduce:hover:shadow-none',
           className,
         )}

@@ -34,7 +34,7 @@ export function LandingNav() {
       className={clsx(
         'fixed inset-x-0 top-0 z-40 transition-all',
         scrolled
-          ? 'border-b border-white/5 bg-surface-base/85 backdrop-blur-md'
+          ? 'border-b border-velvet-content-primary/5 bg-velvet-surface-base/85 backdrop-blur-md'
           : 'border-b border-transparent bg-transparent',
       )}
     >
@@ -48,7 +48,7 @@ export function LandingNav() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm font-medium text-gray-400 transition-colors hover:text-white"
+              className="text-sm font-medium text-velvet-content-secondary transition-colors hover:text-velvet-content-primary"
             >
               {link.label}
             </Link>
@@ -60,7 +60,7 @@ export function LandingNav() {
             href="https://github.com/beenuar/AiSOC"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-3 py-1.5 text-sm font-medium text-gray-300 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+            className="inline-flex items-center gap-2 rounded-md border border-velvet-border bg-velvet-surface-raised/60 px-3 py-1.5 text-sm font-medium text-velvet-content-secondary transition hover:border-velvet-border-strong hover:bg-velvet-surface-raised hover:text-velvet-content-primary"
           >
             <svg viewBox="0 0 24 24" className="h-4 w-4" aria-hidden="true" fill="currentColor">
               <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.69-3.88-1.54-3.88-1.54-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.69.08-.69 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.24 3.34.95.1-.74.4-1.24.73-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 015.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.7 5.39-5.27 5.68.41.36.78 1.06.78 2.14 0 1.55-.01 2.79-.01 3.17 0 .31.21.68.8.56C20.21 21.39 23.5 17.08 23.5 12 23.5 5.65 18.35.5 12 .5z" />
@@ -69,7 +69,7 @@ export function LandingNav() {
           </a>
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-md bg-brand-500 px-4 py-1.5 text-sm font-semibold text-white transition hover:bg-brand-400"
+            className="inline-flex items-center gap-2 rounded-md bg-velvet-emerald-cta px-4 py-1.5 text-sm font-semibold text-velvet-content-primary transition hover:brightness-110 motion-safe:hover:shadow-glow-emerald-sm"
           >
             Launch console
             <svg viewBox="0 0 20 20" className="h-3.5 w-3.5" fill="currentColor" aria-hidden="true">
@@ -81,7 +81,7 @@ export function LandingNav() {
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-gray-300 hover:border-white/20"
+          className="md:hidden inline-flex h-9 w-9 items-center justify-center rounded-md border border-velvet-border bg-velvet-surface-raised/60 text-velvet-content-secondary hover:border-velvet-border-strong"
           aria-expanded={open}
           aria-label="Toggle menu"
         >
@@ -96,14 +96,14 @@ export function LandingNav() {
       </div>
 
       {open && (
-        <div className="border-t border-white/5 bg-surface-base/95 backdrop-blur-md md:hidden">
+        <div className="border-t border-velvet-content-primary/5 bg-velvet-surface-base/95 backdrop-blur-md md:hidden">
           <div className="space-y-1 px-4 py-3">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-white/5 hover:text-white"
+                className="block rounded-md px-3 py-2 text-sm text-velvet-content-secondary hover:bg-velvet-surface-raised hover:text-velvet-content-primary"
               >
                 {link.label}
               </Link>
@@ -113,13 +113,13 @@ export function LandingNav() {
                 href="https://github.com/beenuar/AiSOC"
                 target="_blank"
                 rel="noreferrer"
-                className="flex-1 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-center text-sm font-medium text-gray-300"
+                className="flex-1 rounded-md border border-velvet-border bg-velvet-surface-raised/60 px-3 py-2 text-center text-sm font-medium text-velvet-content-secondary"
               >
                 GitHub
               </a>
               <Link
                 href="/dashboard"
-                className="flex-1 rounded-md bg-brand-500 px-3 py-2 text-center text-sm font-semibold text-white"
+                className="flex-1 rounded-md bg-velvet-emerald-cta px-3 py-2 text-center text-sm font-semibold text-velvet-content-primary"
               >
                 Launch
               </Link>

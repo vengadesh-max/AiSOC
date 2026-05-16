@@ -38,10 +38,10 @@ export function MitreStrip() {
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.5 }}
           >
-            <span className="text-xs font-semibold uppercase tracking-wider text-brand-300">
+            <span className="text-xs font-semibold uppercase tracking-wider text-velvet-emerald-mint">
               MITRE ATT&CK
             </span>
-            <h2 className="mt-3 text-3xl font-bold tracking-tight text-white md:text-4xl">
+            <h2 className="font-velvet-display font-normal mt-3 text-3xl tracking-tight text-velvet-content-primary md:text-4xl">
               Coverage by tactic
             </h2>
             <p className="mt-4 text-lg text-gray-400">
@@ -63,7 +63,7 @@ export function MitreStrip() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="rounded-2xl border border-white/5 bg-surface-card/50 p-5"
+            className="rounded-2xl border border-velvet-content-primary/5 bg-velvet-surface-raised/50 p-5"
           >
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
               {TACTICS.map((t) => {
@@ -73,15 +73,15 @@ export function MitreStrip() {
                     key={t.id}
                     className={`relative overflow-hidden rounded-lg border p-3 ${toneFor(ratio)}`}
                   >
-                    <div className="font-mono text-[10px] uppercase tracking-wider text-white/70">
+                    <div className="font-mono text-[10px] uppercase tracking-wider text-velvet-content-primary/70">
                       {t.id}
                     </div>
-                    <div className="mt-1 text-sm font-semibold text-white">{t.name}</div>
-                    <div className="mt-2 flex items-baseline gap-1.5 text-xs text-white/80">
-                      <span className="font-mono text-base font-bold text-white">
+                    <div className="mt-1 text-sm font-semibold text-velvet-content-primary">{t.name}</div>
+                    <div className="mt-2 flex items-baseline gap-1.5 text-xs text-velvet-content-primary/80">
+                      <span className="font-mono text-base font-bold text-velvet-content-primary">
                         {t.covered}
                       </span>
-                      <span className="text-white/50">/ {t.total}</span>
+                      <span className="text-velvet-content-primary/50">/ {t.total}</span>
                     </div>
                     <div className="mt-2 h-1 overflow-hidden rounded-full bg-white/10">
                       <div
