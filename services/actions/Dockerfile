@@ -1,12 +1,15 @@
-FROM python:3.11-slim
+FROM python:3.11-slim AS builder
 
 WORKDIR /app
 
-RUN pip install poetry==1.7.1 && \
-    poetry config virtualenvs.create false
+RUN pip install --no-cache-dir poetry==1.7.1
+
+RUN python -m venv /app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
 
 COPY pyproject.toml poetry.lock* ./
 
+<<<<<<< HEAD
 # Run poetry without swallowing errors. Falls back to a complete pip
 # install mirroring pyproject.toml so a transient registry timeout
 # doesn't fail the whole image build. The previous fallback used
@@ -33,8 +36,23 @@ RUN set -eux; \
             "python-dateutil>=2.8.2,<3" \
             "cryptography>=42,<43" ; \
     fi
+=======
+RUN poetry install --only main --no-interaction --no-ansi --no-root
+
+FROM python:3.11-slim AS runtime
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PATH="/app/.venv/bin:$PATH"
+
+WORKDIR /app
+
+COPY --from=builder /app/.venv /app/.venv
+>>>>>>> 70f6df14 (optimised the aisoc-actions docker image by reducing the image size from 339mb to 224mb)
 
 COPY app/ ./app/
+
+RUN python -c "import asyncpg, sqlalchemy, fastapi, aiokafka, redis"
 
 EXPOSE 8085
 
