@@ -36,7 +36,6 @@ if str(_AGENTS_ROOT) not in sys.path:
 
 from app.api import investigate as investigate_mod  # noqa: E402
 
-
 FLAG = investigate_mod.USE_ROUTER_FLAG
 
 

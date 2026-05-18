@@ -39,6 +39,8 @@ _AGENTS_ROOT = Path(__file__).resolve().parents[1]
 if str(_AGENTS_ROOT) not in sys.path:
     sys.path.insert(0, str(_AGENTS_ROOT))
 
+import inspect  # noqa: E402
+
 from app.investigator.orchestrator import InvestigatorOrchestrator  # noqa: E402
 from app.models.state import AgentStatus, InvestigationState  # noqa: E402
 from app.orchestrator.router import (  # noqa: E402
@@ -46,8 +48,6 @@ from app.orchestrator.router import (  # noqa: E402
     RouterOrchestrator,
     _coerce_uuid,
 )
-
-import inspect  # noqa: E402
 
 SUBAGENT_SLEEP_MS = 5
 
@@ -378,6 +378,57 @@ async def test_failed_done_is_translated_to_error_event(
     assert err["case_id"] == "case-fail-1"
     assert err["run_id"] == str(run_id)
     assert "ledger blew up" in err["error"]
+
+
+@pytest.mark.asyncio
+async def test_failed_error_event_carries_partial_report(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Synthesised error event must include the partial ``report_md`` /
+    ``report_html`` / ``state`` snapshot the router assembled before the
+    failure, so the UI can still render the in-progress narrative instead
+    of losing every finding the sub-agents already produced."""
+    _stub_ledger(monkeypatch)
+
+    partial_md = "# Partial report\n\nauto_triage finding: suspicious"
+    partial_html = "<h1>Partial report</h1><p>auto_triage finding: suspicious</p>"
+    partial_state = {
+        "status": AgentStatus.FAILED.value,
+        "error": "phishing sub-agent crashed mid-fanout",
+        "findings": ["auto_triage finding: suspicious"],
+    }
+
+    async def _fake_stream(
+        self: RouterOrchestrator,
+        state: InvestigationState,
+        *,
+        topology: str | None = None,
+    ):
+        yield {
+            "type": "done",
+            "case_id": state.incident_id,
+            "run_id": str(state.run_id),
+            "state": partial_state,
+            "report_md": partial_md,
+            "report_html": partial_html,
+            "info": {"topology": "parallel"},
+        }
+
+    monkeypatch.setattr(RouterOrchestrator, "stream", _fake_stream, raising=True)
+
+    events = await _collect(
+        RouterOrchestrator().stream_kwargs(
+            case_id="case-partial-1",
+            alert_summary="partial fanout",
+        )
+    )
+
+    assert [e["type"] for e in events] == ["error"]
+    err = events[0]
+    assert err["report_md"] == partial_md
+    assert err["report_html"] == partial_html
+    assert err["state"] == partial_state
+    assert "phishing sub-agent crashed" in err["error"]
 
 
 @pytest.mark.asyncio

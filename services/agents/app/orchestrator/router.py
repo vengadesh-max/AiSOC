@@ -1152,8 +1152,11 @@ class RouterOrchestrator:
         3. Synthesises an explicit ``{"type": "error"}`` event when the
            underlying router reports failure inside its terminal ``done``
            event (router models failure in-band; the endpoint expects an
-           out-of-band error). The original ``done`` is suppressed on the
-           failure path so consumers don't see both.
+           out-of-band error). The partial ``report_md`` / ``report_html``
+           / ``state`` snapshot the router did assemble before the failure
+           is included on the synthesised error event so the UI can still
+           render the in-progress narrative. The original ``done`` is
+           suppressed on the failure path so consumers don't see both.
         """
         # Coerce caller strings to UUIDs for the internal state model.
         # Original strings are preserved on every yielded event so /investigate
@@ -1199,6 +1202,9 @@ class RouterOrchestrator:
                         or "router investigation failed",
                         "case_id": case_id,
                         "run_id": run_id_str,
+                        "report_md": event.get("report_md"),
+                        "report_html": event.get("report_html"),
+                        "state": event_state,
                     }
                     return
                 yield {
