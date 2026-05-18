@@ -13,6 +13,11 @@ from typing import Any, Final
 from pydantic import AliasChoices, Field, PostgresDsn, RedisDsn, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+
+def alias_choices(*names: str) -> AliasChoices:
+    """Canonical helper for fields that accept multiple environment variable names."""
+    return AliasChoices(*names)
+
 # Default placeholders shipped in source. Anything matching these in a
 # non-development environment triggers a hard startup warning (see
 # ``warn_if_insecure_defaults`` below). Exposed as a constant so tests
@@ -246,7 +251,7 @@ class Settings(BaseSettings):
     # ------------------------------------------------------------------
     HUNT_SCHEDULER_ENABLED: bool = Field(
         default=False,
-        validation_alias=AliasChoices(
+        validation_alias=alias_choices(
             "HUNT_SCHEDULER_ENABLED", "AISOC_HUNT_SCHEDULER_ENABLED"
         ),
     )
